@@ -2739,7 +2739,9 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   let dbP=null;
   function getDb(){ if(!dbP) dbP=(window.claude&&window.claude.use)?Promise.all([window.claude.use('db').catch(()=>null),window.claude.use('user').catch(()=>null)]):Promise.resolve([null,null]); return dbP; }
-  getDb().then(([db])=>{ if(!db) return;
+  const SHEET_URL='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
+  function loadSheetCounts(){ fetch(SHEET_URL+'?t='+Date.now()).then(r=>r.json()).then(j=>{ if(j&&j.states){ const c={}; Object.keys(j.states).forEach(s=>{ if(STATES[s]) c[s]=+j.states[s]||0; }); counts=c; paint(); } }).catch(()=>{}); }
+  getDb().then(([db])=>{ if(!db){ loadSheetCounts(); return; }
     db.collection('pins').onSnapshot(snap=>{const c={};snap.docs.forEach(d=>{const s=d.data()&&d.data().state;if(STATES[s])c[s]=(c[s]||0)+1;});counts=c;paint();},()=>{});
   });
 
@@ -2812,7 +2814,15 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     }
 
     const [db,user]=await getDb();
-    if(!db){ nearMsg.textContent='Sign-ups open soon. In the meantime, book a free matchmaking call.'; submitting=false; return; }
+    if(!db){
+      try{
+        await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,email,phone,school,zip,state,newsletter:news,source:'website map'+(location.search?' '+location.search.slice(0,50):'')})});
+        if(news){ counts[state]=(counts[state]||0)+1; paint(); markYou(state); setTimeout(loadSheetCounts,4000); }
+        nearMsg.textContent=news?'Welcome to the 2by2 family. You’re on the map, and your first Admissions Letter is on its way.':'Saved. Check “join the 2by2 family” anytime to be counted on the map.';
+        nearForm.reset(); document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
+      }catch(err){ nearMsg.textContent='We couldn’t save that just now. Your result is above; try again in a minute.'; }
+      submitting=false; return;
+    }
     try{
       const uid=user?await user.id():null;
       const now=new Date().toISOString();
