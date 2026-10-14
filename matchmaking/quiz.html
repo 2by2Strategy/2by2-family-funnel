@@ -184,6 +184,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-10;pointer-events:none;b
 /* ---------- SETTINGS: fill these in before launch ---------- */
 var BOOKING_URL = '';            // TODO: 2by2 calendar link (name/email/phone are appended as URL params)
 var WEBHOOK_URL = '';            // TODO: GoHighLevel inbound webhook; answers are POSTed here as JSON
+var SHEET_URL   = 'https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec'; // 2by2 Family Sign-ups sheet, tab "Matchmaking Quiz"
 /* ----------------------------------------------------------- */
 
 var I = {
@@ -373,16 +374,17 @@ function renderDone(){
       '<li><b class="n">2</b><span>On the call, we recommend the counselor'+(early?' and an early-years plan':'')+' who fits best and explain why.</span></li>'+
       '<li><b class="n">3</b><span>We introduce you, brief the counselor on everything you shared, and stay with you after the match.</span></li>'+
     '</ul></div>';
-  document.getElementById('book').onclick=function(e){ if(!BOOKING_URL){ e.preventDefault(); } track('Schedule'); };
+  document.getElementById('book').onclick=function(e){ if(!BOOKING_URL){ e.preventDefault(); } track('Schedule'); send('book'); };
 }
 
 /* tracking + lead capture */
 var UTM={}; (function(){ var p=new URLSearchParams(location.search); ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(function(k){ if(p.get(k)) UTM[k]=p.get(k); }); })();
 function track(ev,data){ try{ if(window.fbq){ if(ev==='Lead'||ev==='Schedule') fbq('track',ev); else fbq('trackCustom','QuizAnswer',data||{}); } }catch(e){} }
+var SID=(function(){ try{ return (crypto.randomUUID&&crypto.randomUUID())||String(Date.now())+Math.random().toString(36).slice(2); }catch(e){ return String(Date.now())+Math.random().toString(36).slice(2); } })();
 function send(stage){
-  if(!WEBHOOK_URL) return;
-  var body=JSON.stringify({stage:stage, answers:A, utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-family-funnel'});
-  try{ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}); }catch(e){}
+  var payload={stage:stage, sid:SID, answers:A, utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-family-funnel'};
+  if(SHEET_URL){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'quiz'},payload)),keepalive:true}); }catch(e){} }
+  if(WEBHOOK_URL && stage!=='book'){ try{ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}); }catch(e){} }
 }
 
 

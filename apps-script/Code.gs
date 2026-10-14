@@ -14,6 +14,7 @@ function doPost(e) {
   var d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'bad json' }); }
   if (d.website) return json_({ ok: true }); // honeypot field: bots fill it, people don't
+  if (d.type === 'quiz') return quiz_(d);
   var name = clean_(d.name, 120), email = clean_(d.email, 160);
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json_({ ok: false, error: 'missing fields' });
   var state = String(d.state || '').toUpperCase();
@@ -39,4 +40,38 @@ function doGet() {
   var out = JSON.stringify({ total: total, states: states });
   cache.put('counts', out, 60);
   return ContentService.createTextOutput(out).setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ---------- Matchmaking questionnaire (tab "Matchmaking Quiz") ---------- */
+var QUIZ_HEAD = ['First seen','Last update','Status','Clicked "Choose a time"','Role','First name','Last name','Email','Phone','Parent name','Parent email',
+  'Readiness (1-10)','Biggest concerns','Grade','GPA','Colleges','What they want in a counselor','Consent',
+  'utm_source','utm_medium','utm_campaign','utm_content','fbclid','gclid','Page','Session'];
+function quizSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Matchmaking Quiz');
+  if (!sh) { sh = ss.insertSheet('Matchmaking Quiz'); sh.appendRow(QUIZ_HEAD); sh.setFrozenRows(1); sh.getRange(1, 1, 1, QUIZ_HEAD.length).setFontWeight('bold'); }
+  return sh;
+}
+function list_(v) { return Array.isArray(v) ? v.join(', ') : (v == null ? '' : v); }
+function quiz_(d) {
+  var a = d.answers || {}, u = d.utm || {}, sid = clean_(d.sid, 60);
+  if (!sid) return json_({ ok: false, error: 'no session' });
+  var lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    var sh = quizSheet_(), last = sh.getLastRow(), row = 0;
+    if (last > 1) {
+      var ids = sh.getRange(2, QUIZ_HEAD.length, last - 1, 1).getValues();
+      for (var i = ids.length - 1; i >= 0; i--) { if (ids[i][0] === sid) { row = i + 2; break; } }
+    }
+    var prev = row ? sh.getRange(row, 1, 1, QUIZ_HEAD.length).getValues()[0] : null;
+    var status = { partial: 'Started (left email)', complete: 'Completed', book: 'Completed' }[d.stage] || 'Started';
+    if (prev && prev[2] === 'Completed' && d.stage === 'partial') status = 'Completed';
+    var values = [prev ? prev[0] : new Date(), new Date(), status, d.stage === 'book' ? 'Yes' : (prev ? prev[3] : 'No'),
+      clean_(a.role), clean_(a.firstName, 80), clean_(a.lastName, 80), clean_(a.email, 160), clean_((a.cc || '') + ' ' + (a.phone || ''), 40),
+      clean_(a.parentName, 120), clean_(a.parentEmail, 160), clean_(a.ready, 5), clean_(list_(a.concern), 300), clean_(a.grade, 20),
+      clean_(a.gpa, 20), clean_(list_(a.colleges), 300), clean_(a.describe, 2000), a.consent ? 'Yes' : (prev ? prev[17] : 'No'),
+      clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200),
+      clean_(d.page, 300), sid];
+    if (row) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
+  } finally { lock.releaseLock(); }
+  return json_({ ok: true });
 }
