@@ -1573,8 +1573,11 @@ footer.ink{margin-top:0!important}
 .story-banner::before{top:calc(-1 * clamp(36px,4.5vw,70px))!important;bottom:calc(-1 * clamp(36px,4.5vw,70px))!important}
 .story-banner img{border-radius:clamp(14px,1.8vw,24px);box-shadow:0 30px 80px -30px rgba(139,108,246,.45)}
 .hero-stripes{display:none!important}
-.menu-btn{border:0!important;outline:0;box-shadow:0 2px 10px rgba(23,18,46,.10)!important}
 .menu-btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+/* menu: plain text, no box */
+.menu-btn,.menu-btn:hover,.menu-btn[aria-expanded="true"]{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;padding:8px 4px!important;color:var(--accent,#5A3FD6)!important;font-weight:600;text-transform:lowercase;letter-spacing:.01em}
+.menu-btn svg{display:none}
+.menu-btn:hover{opacity:.7}
 </style>
 
 <div class="hero-bg" aria-hidden="true"><canvas id="mesh" width="240" height="160"></canvas></div>
