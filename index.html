@@ -2090,7 +2090,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   // ----- text-me handoff (chat -> SMS via GHL / sheet) -----
   const TX_SHEET='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
-  const TX_GHL='';   // TODO: GoHighLevel inbound webhook URL
+  const TX_GHL='https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/31c821a5-d367-4bc0-8bd3-df5757bdd1dd';   // TODO: GoHighLevel inbound webhook URL
   const txQs=[]; let txLead=null, txEl=null;
   const txSid=(()=>{try{return crypto.randomUUID()}catch(e){return Date.now()+''+Math.random().toString(36).slice(2)}})();
   const txUtm=(()=>{const o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
