@@ -1583,6 +1583,22 @@ footer.ink{margin-top:0!important}
 .menu-btn,.menu-btn:hover,.menu-btn[aria-expanded="true"]{color:#5640CE!important;font:700 19px/1 var(--sans)!important;letter-spacing:.02em!important}
 .menu-btn:hover{opacity:1;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
 :root{color-scheme:only light}
+/* chat -> text handoff card */
+.tx-card{margin:6px 0 4px;padding:16px 18px;border-radius:16px;background:#F5F1FF;border:1px solid #DDD3FB;display:grid;gap:10px;line-height:1.4;max-width:560px}
+.tx-k{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#5640CE}
+.tx-h{margin:0;font:700 17px var(--sans);color:#17122E}
+.tx-p{margin:0;font-size:14.5px;color:#3d3757}
+.tx-row{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
+.tx-in{width:100%;box-sizing:border-box;padding:11px 13px;border-radius:10px;border:1px solid #D5CBF6;background:#fff;font:400 15px var(--sans);color:#17122E;outline:none}
+.tx-in:focus{border-color:#5640CE;box-shadow:0 0 0 3px rgba(86,64,206,.15)}
+.tx-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.tx-ok{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#5C5C66;cursor:pointer}
+.tx-ok input{margin-top:2px;width:16px;height:16px;accent-color:#5640CE;flex:none}
+.tx-go{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border:0;border-radius:999px;background:#5640CE;color:#fff;font:700 15px var(--sans);cursor:pointer;transition:transform .15s,background .15s}
+.tx-go:hover{transform:translateY(-1px);background:#4A35BD}
+.tx-err{margin:0;min-height:0;font-size:13px;color:#B42318}
+.tx-err:empty{display:none}
+@media (max-width:520px){.tx-row{grid-template-columns:1fr}}
 </style>
 
 <div class="hero-bg" aria-hidden="true"><canvas id="mesh" width="240" height="160"></canvas></div>
@@ -2045,6 +2061,43 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     return s;
   }
 
+  // ----- text-me handoff (chat -> SMS via GHL / sheet) -----
+  const TX_SHEET='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
+  const TX_GHL='';   // TODO: GoHighLevel inbound webhook URL
+  const txQs=[]; let txLead=null, txEl=null;
+  const txSid=(()=>{try{return crypto.randomUUID()}catch(e){return Date.now()+''+Math.random().toString(36).slice(2)}})();
+  const txUtm=(()=>{const o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
+  function txSend(stage){
+    if(!txLead) return;
+    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:true,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat'};
+    try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),keepalive:true})}catch(e){}
+    if(TX_GHL){try{fetch(TX_GHL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true})}catch(e){}}
+  }
+  function txCard(){
+    if(txEl){ thread.appendChild(txEl); thread.scrollTop=thread.scrollHeight; const f=txEl.querySelector('input'); if(f) f.focus({preventScroll:true}); return; }
+    const el=document.createElement('form'); el.className='tx-card'; el.noValidate=true;
+    el.innerHTML='<span class="tx-k">Get your answer by text</span>'+
+      '<p class="tx-h">Where should your matchmaker text you?</p>'+
+      '<div class="tx-row"><input class="tx-in" id="txName" autocomplete="given-name" placeholder="First name" aria-label="First name">'+
+      '<input class="tx-in" id="txPhone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Mobile number" aria-label="Mobile number">'+
+      '<input type="text" name="website" tabindex="-1" autocomplete="off" class="tx-hp" aria-hidden="true"></div>'+
+      '<label class="tx-ok"><input type="checkbox" id="txOk"><span>I agree to get texts from 2by2 Academy about my question. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>'+
+      '<button type="submit" class="tx-go">Text me <span aria-hidden="true">&rsaquo;</span></button><p class="tx-err" aria-live="polite"></p>';
+    el.addEventListener('submit',ev=>{
+      ev.preventDefault(); const err=el.querySelector('.tx-err');
+      if(el.querySelector('.tx-hp').value) return;
+      const name=el.querySelector('#txName').value.trim(); let ph=el.querySelector('#txPhone').value.replace(/\D/g,''); if(ph.length===11&&ph[0]==='1') ph=ph.slice(1);
+      if(!/^[A-Za-z\u00C0-\u00FF' .-]{2,}$/.test(name)){err.textContent='Add your first name.';return;}
+      if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(ph)){err.textContent='Enter a 10-digit US mobile number.';return;}
+      if(!el.querySelector('#txOk').checked){err.textContent='Check the box so we can text you.';return;}
+      txLead={name,phone:ph}; txSend('new'); track('chat_text_me',{questions:txQs.length});
+      el.innerHTML='<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+name.replace(/[<>&"]/g,'')+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>';
+      thread.scrollTop=thread.scrollHeight;
+    });
+    txEl=el; thread.appendChild(el); thread.scrollTop=thread.scrollHeight;
+    setTimeout(()=>el.querySelector('#txName').focus({preventScroll:true}),60);
+  }
+
   function startLoader(body){
     const steps=['Reading your question','Checking admissions data','Pulling together your answer'];
     body.textContent='';
@@ -2074,9 +2127,16 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     const sample=await getSample();
     if(!sample){
       await waitMin();
-      show("Good question, and the honest answer depends on your student. On a free matchmaking call, we\u2019ll pair you with a counselor who can answer it properly.");
-      await new Promise(r=>{ const w=()=>{ if(typed>=target.length) r(); else setTimeout(w,120); }; w(); });
-      answered++; maybeShowMatch();
+      txQs.push(q);
+      if(txLead){
+        show("Got it. We\u2019ve added this to your conversation, and your matchmaker will text you at \u2022\u2022\u2022 "+txLead.phone.slice(-4)+".");
+        txSend('followup');
+      }else{
+        show(txQs.length>1?"Added. Your matchmaker will answer both by text.":"Great question. A real 2by2 matchmaker will text you the answer, usually within minutes.");
+        await new Promise(r=>{ const w=()=>{ if(typed>=target.length) r(); else setTimeout(w,120); }; w(); });
+        txCard();
+      }
+      track('chat_question_sent_sms',{count:asked});
       return;
     }
     const extraction=llmExtract(sample,q).then(r=>{ if(r){ mergeProfile(r); if(r.needsHuman===true) needsHumanNow=true; } });

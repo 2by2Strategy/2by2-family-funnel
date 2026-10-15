@@ -15,6 +15,7 @@ function doPost(e) {
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'bad json' }); }
   if (d.website) return json_({ ok: true }); // honeypot field: bots fill it, people don't
   if (d.type === 'quiz') return quiz_(d);
+  if (d.type === 'chat') return chat_(d);
   var name = clean_(d.name, 120), email = clean_(d.email, 160);
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json_({ ok: false, error: 'missing fields' });
   var state = String(d.state || '').toUpperCase();
@@ -72,6 +73,28 @@ function quiz_(d) {
       clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200),
       clean_(d.page, 300), sid];
     if (row) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
+  } finally { lock.releaseLock(); }
+  return json_({ ok: true });
+}
+
+/* ---------- Website chat "text me" leads (tab "Chat Leads") ---------- */
+var CHAT_HEAD = ['First seen','Last update','First name','Mobile','Questions','# questions','Consent to text',
+  'utm_source','utm_medium','utm_campaign','utm_content','fbclid','gclid','Page','Session'];
+function chat_(d) {
+  var sid = clean_(d.sid, 60), name = clean_(d.name, 80), phone = String(d.phone || '').replace(/\D/g, '').slice(0, 15);
+  if (!sid || !name || phone.length < 10) return json_({ ok: false, error: 'missing fields' });
+  var qs = (Array.isArray(d.questions) ? d.questions : []).slice(0, 20).map(function (q) { return clean_(q, 500); });
+  var u = d.utm || {};
+  var lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Chat Leads');
+    if (!sh) { sh = ss.insertSheet('Chat Leads'); sh.appendRow(CHAT_HEAD); sh.setFrozenRows(1); sh.getRange(1, 1, 1, CHAT_HEAD.length).setFontWeight('bold'); }
+    var last = sh.getLastRow(), row = 0;
+    if (last > 1) { var ids = sh.getRange(2, CHAT_HEAD.length, last - 1, 1).getValues(); for (var i = ids.length - 1; i >= 0; i--) if (ids[i][0] === sid) { row = i + 2; break; } }
+    var first = row ? sh.getRange(row, 1).getValue() : new Date();
+    var vals = [first, new Date(), name, "'" + phone, qs.join('\n\n'), qs.length, d.consent ? 'Yes' : 'No',
+      clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200), clean_(d.page, 300), sid];
+    if (row) sh.getRange(row, 1, 1, vals.length).setValues([vals]); else sh.appendRow(vals);
   } finally { lock.releaseLock(); }
   return json_({ ok: true });
 }
