@@ -163,6 +163,7 @@ body>.wrap{width:100%}
 body::before{content:"";position:fixed;inset:0;z-index:-10;pointer-events:none;background-image:radial-gradient(900px 600px at 100% 0%,rgba(204,190,245,.8),rgba(204,190,245,0) 70%),radial-gradient(700px 520px at 0% 100%,rgba(204,190,245,.45),rgba(204,190,245,0) 70%)}
 footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .consent a{color:var(--p);text-decoration:underline}
+.fields label.consent,.consent span{font-weight:400!important;font-size:12.5px;color:var(--body)}
 </style>
 </head>
 <body>
@@ -281,7 +282,7 @@ function render(focus){
       '<div><label for="ph">Your preferred phone number</label><div class="phone"><select class="field" id="cc" aria-label="Country code"><option value="+1">US +1</option><option value="+1">CA +1</option><option value="+44">UK +44</option><option value="+86">CN +86</option><option value="+82">KR +82</option><option value="+91">IN +91</option><option value="+852">HK +852</option><option value="+65">SG +65</option></select>'+
       '<input class="field" id="ph" type="tel" autocomplete="tel-national" placeholder="(201) 555-0123" value="'+esc(A.phone||'')+'"></div></div>'+
       (isStudent()?'<div class="two"><div><label for="pn">Parent / guardian name</label><input class="field" id="pn" placeholder="Full name" value="'+esc(A.parentName||'')+'"></div><div><label for="pe">Parent / guardian email</label><input class="field" id="pe" type="email" placeholder="parent@example.com" value="'+esc(A.parentEmail||'')+'"></div></div>':'')+
-      '<label class="consent"><input type="checkbox" id="ok"'+(A.consent?' checked':'')+'><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. <a href="../privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="../terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
+      '<label class="consent"><input type="checkbox" id="ok"'+(A.consent?' checked':'')+'><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. Texts are sent to US mobile numbers only. <a href="../privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="../terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
       '</div><div class="err" id="err"></div><button class="cta" id="next" type="button">Book my matchmaking call &rarr;</button>';
   }
   h+='</div>';

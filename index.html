@@ -2070,21 +2070,21 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   // ----- reply bank for the text-me chat -----
   const TX_BANK=[
-    {k:/^\s*(hi|hey|hello|yo|sup|what'?s up|wassup|good (morning|afternoon|evening)|howdy)\b[\s!.?]*$/i, r:["Hi there! Tell us a little about your student, or ask anything about college admissions. A 2by2 matchmaker will text you back.","Hey! What\u2019s on your mind about college? A real 2by2 matchmaker will reply by text."]},
-    {k:/\b(thank|thanks|thx|appreciate)\b/i, r:["Of course. Your matchmaker will text you shortly."]},
-    {k:/\b(price|pricing|cost|how much|fee|expensive|afford 2by2|charge)\b/i, r:["Fair question. The matchmaking call is free, and counselors in our network work at different price points. Your matchmaker will walk you through options by text.","The first call is free. A 2by2 matchmaker will text you about what fits your budget."]},
-    {k:/\b(essay|personal statement|supplement|common app|writing|prompt)\b/i, r:["Essays are where a lot of students find their story. A 2by2 matchmaker will text you to talk it through.","Good one to get help on early. A real 2by2 matchmaker will text you about your student\u2019s essays."]},
-    {k:/\b(list|which (schools|colleges)|reach|safety|target|match school|where should)\b/i, r:["Building the right list depends a lot on your student. A 2by2 matchmaker will text you to learn more.","A strong list starts with fit, not rankings. Your 2by2 matchmaker will text you to dig in."]},
-    {k:/\b(aid|fafsa|css|scholarship|merit|financial|tuition|loan|net price)\b/i, r:["Paying for college is a big piece of this. A 2by2 matchmaker will text you to go over it.","Aid and scholarships vary a lot by school. Your matchmaker will text you with next steps."]},
-    {k:/\b(sat|act|test[- ]optional|test score|psat|ap exam|scores?)\b/i, r:["Testing strategy really depends on the schools and the score. A 2by2 matchmaker will text you about it.","Good question to get right. Your 2by2 matchmaker will text you to talk testing."]},
-    {k:/\b(early decision|early action|\bed\b|\bea\b|rea|scea|deadline|due|when should|timeline|november|january)\b/i, r:["Timing matters here. A 2by2 matchmaker will text you, usually within minutes.","Deadlines can sneak up fast. Your matchmaker will text you to map out the timeline."]},
-    {k:/\b(athlete|recruit|sport|coach|portfolio|art|music|film|theater|audition)\b/i, r:["That\u2019s a specialty path, and we have counselors who focus on it. A 2by2 matchmaker will text you.","Recruiting and portfolios need the right expert. Your matchmaker will text you to learn more."]},
-    {k:/\b(transfer|community college|gap year)\b/i, r:["There are some smart pathways here. A 2by2 matchmaker will text you to talk through them."]},
-    {k:/\b(gpa|grades?|chance|chances|get in|competitive|admit)\b/i, r:["Every student is more than a number. A 2by2 matchmaker will text you to hear the full picture.","That depends on more than grades. Your 2by2 matchmaker will text you to learn about your student."]},
-    {k:/\b(counselor|consultant|who are you|what is 2by2|how does (this|2by2) work|matchmak)\b/i, r:["We match your student with a vetted independent counselor who fits. A 2by2 matchmaker will text you to explain how it works."]}
+    {k:/^\s*(hi|hey|hello|yo|sup|what'?s up|wassup|good (morning|afternoon|evening)|howdy)\b[\s!.?]*$/i, r:["Hi there! Tell us a little about your student, or ask anything about college admissions. A 2by2 matchmaker can follow up with you.","Hey! What\u2019s on your mind about college? A real 2by2 matchmaker can follow up with you."]},
+    {k:/\b(thank|thanks|thx|appreciate)\b/i, r:["Of course. Your matchmaker will follow up shortly."]},
+    {k:/\b(price|pricing|cost|how much|fee|expensive|afford 2by2|charge)\b/i, r:["Fair question. The matchmaking call is free, and counselors in our network work at different price points. Your matchmaker can walk you through options.","The first call is free. A 2by2 matchmaker can follow up about what fits your budget."]},
+    {k:/\b(essay|personal statement|supplement|common app|writing|prompt)\b/i, r:["Essays are where a lot of students find their story. A 2by2 matchmaker can follow up with you to talk it through.","Good one to get help on early. A real 2by2 matchmaker can follow up with you about your student\u2019s essays."]},
+    {k:/\b(list|which (schools|colleges)|reach|safety|target|match school|where should)\b/i, r:["Building the right list depends a lot on your student. A 2by2 matchmaker can follow up with you to learn more.","A strong list starts with fit, not rankings. Your 2by2 matchmaker can follow up with you to dig in."]},
+    {k:/\b(aid|fafsa|css|scholarship|merit|financial|tuition|loan|net price)\b/i, r:["Paying for college is a big piece of this. A 2by2 matchmaker can follow up with you to go over it.","Aid and scholarships vary a lot by school. Your matchmaker can follow up with you with next steps."]},
+    {k:/\b(sat|act|test[- ]optional|test score|psat|ap exam|scores?)\b/i, r:["Testing strategy really depends on the schools and the score. A 2by2 matchmaker can follow up with you about it.","Good question to get right. Your 2by2 matchmaker can follow up with you to talk testing."]},
+    {k:/\b(early decision|early action|\bed\b|\bea\b|rea|scea|deadline|due|when should|timeline|november|january)\b/i, r:["Timing matters here. A 2by2 matchmaker can follow up with you, usually within minutes.","Deadlines can sneak up fast. Your matchmaker can follow up with you to map out the timeline."]},
+    {k:/\b(athlete|recruit|sport|coach|portfolio|art|music|film|theater|audition)\b/i, r:["That\u2019s a specialty path, and we have counselors who focus on it. A 2by2 matchmaker can follow up with you.","Recruiting and portfolios need the right expert. Your matchmaker can follow up with you to learn more."]},
+    {k:/\b(transfer|community college|gap year)\b/i, r:["There are some smart pathways here. A 2by2 matchmaker can follow up with you to talk through them."]},
+    {k:/\b(gpa|grades?|chance|chances|get in|competitive|admit)\b/i, r:["Every student is more than a number. A 2by2 matchmaker can follow up with you to hear the full picture.","That depends on more than grades. Your 2by2 matchmaker can follow up with you to learn about your student."]},
+    {k:/\b(counselor|consultant|who are you|what is 2by2|how does (this|2by2) work|matchmak)\b/i, r:["We match your student with a vetted independent counselor who fits. A 2by2 matchmaker can follow up with you to explain how it works."]}
   ];
-  const TX_GENERIC=["Thanks for sharing. A real 2by2 matchmaker will text you back, usually within minutes.","Got it. A 2by2 matchmaker will text you to follow up, usually within minutes.","Thanks! Your question is with a real person on our team, and they\u2019ll text you shortly."];
-  const TX_FOLLOW=["Got it. We\u2019ve added this to your conversation, and your matchmaker will text you at \u2022\u2022\u2022 {last4}.","Added. Your matchmaker will cover this when they text you at \u2022\u2022\u2022 {last4}.","Noted. This is on its way to your matchmaker too."];
+  const TX_GENERIC=["Thanks for sharing. A real 2by2 matchmaker can follow up with you, usually within minutes.","Got it. A 2by2 matchmaker can follow up with you, usually within minutes.","Thanks! Your question is with a real person on our team, and they\u2019ll follow up shortly."];
+  const TX_FOLLOW=["Got it. We\u2019ve added this to your conversation, and your matchmaker can follow up with you at \u2022\u2022\u2022 {last4}.","Added. Your matchmaker will cover this when they text you at \u2022\u2022\u2022 {last4}.","Noted. This is on its way to your matchmaker too."];
   const txPick=a=>a[Math.floor(Math.random()*a.length)];
   function txReply(q){ for(const b of TX_BANK){ if(b.k.test(q)) return txPick(b.r); } return txPick(TX_GENERIC); }
 
@@ -2103,13 +2103,13 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   function txCard(){
     if(txEl){ thread.appendChild(txEl); thread.scrollTop=thread.scrollHeight; const f=txEl.querySelector('input'); if(f) f.focus({preventScroll:true}); return; }
     const el=document.createElement('form'); el.className='tx-card'; el.noValidate=true;
-    el.innerHTML='<span class="tx-k">Get your answer by text</span>'+
-      '<p class="tx-h">Where should your matchmaker text you?</p>'+
+    el.innerHTML='<span class="tx-k">Get a reply from a matchmaker</span>'+
+      '<p class="tx-h">How can your matchmaker reach you?</p>'+
       '<div class="tx-row"><input class="tx-in" id="txName" autocomplete="given-name" placeholder="First name" aria-label="First name">'+
       '<input class="tx-in" id="txPhone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Mobile number" aria-label="Mobile number">'+
       '<input type="text" name="website" tabindex="-1" autocomplete="off" class="tx-hp" aria-hidden="true"></div>'+
       '<label class="tx-ok"><input type="checkbox" id="txOk"><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
-      '<button type="submit" class="tx-go">Text me <span aria-hidden="true">&rsaquo;</span></button><p class="tx-err" aria-live="polite"></p>';
+      '<button type="submit" class="tx-go">Send <span aria-hidden="true">&rsaquo;</span></button><p class="tx-err" aria-live="polite"></p>';
     el.addEventListener('submit',ev=>{
       ev.preventDefault(); const err=el.querySelector('.tx-err');
       if(el.querySelector('.tx-hp').value) return;
@@ -2160,7 +2160,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
         show(txLead.sms?txPick(TX_FOLLOW).replace("{last4}",txLead.phone.slice(-4)):"Added. Your matchmaker will cover this when they reach out.");
         txSend('followup');
       }else{
-        show(txQs.length>1?"Added. Your matchmaker will cover both by text.":txReply(q));
+        show(txQs.length>1?"Added. Your matchmaker will cover both when they follow up.":txReply(q));
         await new Promise(r=>{ const w=()=>{ if(typed>=target.length) r(); else setTimeout(w,120); }; w(); });
         txCard();
       }
@@ -2933,7 +2933,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       const uid=user?await user.id():null;
       const now=new Date().toISOString();
       if(!uid) throw new Error('no id');
-      await db.collection('leads/'+uid+'/entries').add({name,email,phone,school,zip,state,newsletter:news,createdAt:now});
+      await db.collection('leads/'+uid+'/entries').add({name,email,phone,school,zip,state,newsletter:news,smsConsent:sms,smsConsentText:'v2026-10-15',page:location.href,createdAt:now});
       if(news) await db.collection('pins').add({state,createdAt:now});
       nearMsg.textContent=news?'Welcome to the 2by2 family. You’re on the map, and your first Admissions Letter is on its way.':'Saved. Check “join the 2by2 family” anytime to be counted on the map.';
       nearForm.reset(); document.getElementById('nSms').checked=false; document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
