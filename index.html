@@ -2096,7 +2096,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   const txUtm=(()=>{const o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
   function txSend(stage){
     if(!txLead) return;
-    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat'};
+    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat',f:{first_name:txLead.name,phone:'+1'+txLead.phone,sms_consent:txLead.sms?'Yes':'No',chat_questions:txQs.map((q,i)=>(i+1)+'. '+(typeof q==='string'?q:(q&&(q.q||q.text||q.question))||'')).join('\n'),utm_source:txUtm.utm_source||'',utm_campaign:txUtm.utm_campaign||''}};
     try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),keepalive:true})}catch(e){}
     if(TX_GHL){try{fetch(TX_GHL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true})}catch(e){}}
   }
