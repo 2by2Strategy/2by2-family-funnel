@@ -1599,6 +1599,12 @@ footer.ink{margin-top:0!important}
 .tx-err{margin:0;min-height:0;font-size:13px;color:#B42318}
 .tx-err:empty{display:none}
 @media (max-width:520px){.tx-row{grid-template-columns:1fr}}
+/* SMS consent */
+.sms-ok{display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted,#5C5C66);margin:2px 0 12px;cursor:pointer}
+.sms-ok input{margin-top:2px;width:16px;height:16px;flex:none;accent-color:#5640CE}
+.sms-ok a,.tx-ok a{color:#5640CE;text-decoration:underline}
+.legal a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.tx-ok{font-size:11px!important;line-height:1.45}
 </style>
 
 <div class="hero-bg" aria-hidden="true"><canvas id="mesh" width="240" height="160"></canvas></div>
@@ -1884,6 +1890,7 @@ footer.ink{margin-top:0!important}
           <input type="checkbox" id="nNews" checked>
           <div><strong>Make it official: join the 2by2 family</strong><span>You'll get the free 2by2 Admissions Letter and be counted on the map. Unsubscribe anytime.</span></div>
         </label>
+        <label class="sms-ok" for="nSms"><input type="checkbox" id="nSms"><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="terms.html" target="_blank" rel="noopener">Terms</a></span></label>
         <button class="btn btn-accent" type="submit" id="nSubmit"><span id="nSubmitTxt">Join the 2by2 family</span> <span class="arrow">›</span></button>
         <p class="msgline" id="nearMsg" aria-live="polite"></p>
         <p class="fine">The map only ever shows states. We never show your name, school, or contact info to other families. We'll use your details to follow up about 2by2.</p>
@@ -1902,12 +1909,12 @@ footer.ink{margin-top:0!important}
 
   <footer class="wrap ink ink-flat">
     <div class="foot">
-      <div><a class="logo" href="#top"><span class="brandmark" role="img" aria-label="2by2 Academy"></span></a><p class="tag">Two by Two Strategy. Two by your side.</p></div>
+      <div><a class="logo" href="#top"><span class="brandmark" role="img" aria-label="2by2 Academy"></span></a><p class="tag">2by2 Academy. Two by your side.</p></div>
       <div><h4>Academy</h4><ul><li><a href="#counselors">Featured counselors</a></li><li><a href="#top">Ask 2by2</a></li><li><a href="#near">Find a family</a></li></ul></div>
-      <div><h4>Company</h4><ul><li><a href="#offer">What we do</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#offer">What we do</a></li><li><a href="mailto:hello@2by2academy.co">Contact</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
       <div><h4>Get started</h4><ul><li><a href="matchmaking/" data-funnel>Book a call</a></li><li><a href="#near">Admissions Letter</a></li></ul></div>
     </div>
-    <p class="legal">© 2026 Two by Two Strategy LLC · New York, NY</p>
+    <p class="legal">© 2026 2by2 Strategy LLC. 2by2 Academy is a brand of 2by2 Strategy LLC. · <a href="mailto:hello@2by2academy.co">hello@2by2academy.co</a> · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a></p>
   </footer>
 </main>
 
@@ -2089,7 +2096,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   const txUtm=(()=>{const o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
   function txSend(stage){
     if(!txLead) return;
-    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:true,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat'};
+    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat'};
     try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),keepalive:true})}catch(e){}
     if(TX_GHL){try{fetch(TX_GHL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true})}catch(e){}}
   }
@@ -2101,7 +2108,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       '<div class="tx-row"><input class="tx-in" id="txName" autocomplete="given-name" placeholder="First name" aria-label="First name">'+
       '<input class="tx-in" id="txPhone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Mobile number" aria-label="Mobile number">'+
       '<input type="text" name="website" tabindex="-1" autocomplete="off" class="tx-hp" aria-hidden="true"></div>'+
-      '<label class="tx-ok"><input type="checkbox" id="txOk"><span>I agree to get texts from 2by2 Academy about my question. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>'+
+      '<label class="tx-ok"><input type="checkbox" id="txOk"><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
       '<button type="submit" class="tx-go">Text me <span aria-hidden="true">&rsaquo;</span></button><p class="tx-err" aria-live="polite"></p>';
     el.addEventListener('submit',ev=>{
       ev.preventDefault(); const err=el.querySelector('.tx-err');
@@ -2109,9 +2116,10 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       const name=el.querySelector('#txName').value.trim(); let ph=el.querySelector('#txPhone').value.replace(/\D/g,''); if(ph.length===11&&ph[0]==='1') ph=ph.slice(1);
       if(!/^[A-Za-z\u00C0-\u00FF' .-]{2,}$/.test(name)){err.textContent='Add your first name.';return;}
       if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(ph)){err.textContent='Enter a 10-digit US mobile number.';return;}
-      if(!el.querySelector('#txOk').checked){err.textContent='Check the box so we can text you.';return;}
-      txLead={name,phone:ph}; txSend('new'); track('chat_text_me',{questions:txQs.length});
-      el.innerHTML='<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+name.replace(/[<>&"]/g,'')+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>';
+      const okSms=el.querySelector('#txOk').checked;
+      txLead={name,phone:ph,sms:okSms}; txSend('new'); track('chat_text_me',{questions:txQs.length});
+      const nm=name.replace(/[<>&"]/g,'');
+      el.innerHTML=okSms?'<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+nm+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>':'<span class="tx-k">Got it</span><p class="tx-h">Thanks, '+nm+'.</p><p class="tx-p">You didn\u2019t opt in to texts, so a 2by2 matchmaker will call you at \u2022\u2022\u2022 '+ph.slice(-4)+' instead. Keep asking here and we\u2019ll add it to your conversation.</p>';
       thread.scrollTop=thread.scrollHeight;
     });
     txEl=el; thread.appendChild(el); thread.scrollTop=thread.scrollHeight;
@@ -2149,7 +2157,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       await waitMin();
       txQs.push(q);
       if(txLead){
-        show(txPick(TX_FOLLOW).replace("{last4}",txLead.phone.slice(-4)));
+        show(txLead.sms?txPick(TX_FOLLOW).replace("{last4}",txLead.phone.slice(-4)):"Added. Your matchmaker will cover this when they reach out.");
         txSend('followup');
       }else{
         show(txQs.length>1?"Added. Your matchmaker will cover both by text.":txReply(q));
@@ -2895,7 +2903,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   nearForm.addEventListener('submit',async e=>{
     e.preventDefault(); if(submitting) return;
     const v=id=>document.getElementById(id).value.trim();
-    const name=v('nName'),email=v('nEmail'),phone=v('nPhone'),school=v('nSchool'),zip=v('nZip'),news=document.getElementById('nNews').checked;
+    const name=v('nName'),email=v('nEmail'),phone=v('nPhone'),school=v('nSchool'),zip=v('nZip'),news=document.getElementById('nNews').checked,sms=document.getElementById('nSms').checked;
     if(!checkAll(NEAR)){nearMsg.textContent='Fix the highlighted fields to continue.';return;}
     const state=zipState(zip);
     nearMsg.textContent=''; submitting=true;
@@ -2914,10 +2922,10 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     const [db,user]=await getDb();
     if(!db){
       try{
-        await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,email,phone,school,zip,state,newsletter:news,source:'website map'+(location.search?' '+location.search.slice(0,50):'')})});
+        await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,email,phone,school,zip,state,newsletter:news,source:'website map · SMS consent: '+(sms?'Yes':'No')+(location.search?' '+location.search.slice(0,40):'')})});
         if(news){ counts[state]=(counts[state]||0)+1; paint(); markYou(state); setTimeout(loadSheetCounts,4000); }
         nearMsg.textContent=news?'Welcome to the 2by2 family. You’re on the map, and your first Admissions Letter is on its way.':'Saved. Check “join the 2by2 family” anytime to be counted on the map.';
-        nearForm.reset(); document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
+        nearForm.reset(); document.getElementById('nSms').checked=false; document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
       }catch(err){ nearMsg.textContent='We couldn’t save that just now. Your result is above; try again in a minute.'; }
       submitting=false; return;
     }
@@ -2928,7 +2936,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       await db.collection('leads/'+uid+'/entries').add({name,email,phone,school,zip,state,newsletter:news,createdAt:now});
       if(news) await db.collection('pins').add({state,createdAt:now});
       nearMsg.textContent=news?'Welcome to the 2by2 family. You’re on the map, and your first Admissions Letter is on its way.':'Saved. Check “join the 2by2 family” anytime to be counted on the map.';
-      nearForm.reset(); document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
+      nearForm.reset(); document.getElementById('nSms').checked=false; document.getElementById('nNews').checked=true; document.getElementById('nNews').dispatchEvent(new Event('change'));
     }catch(err){
       nearMsg.textContent='We couldn’t save that just now. Your result is above; try again in a minute.';
     }
