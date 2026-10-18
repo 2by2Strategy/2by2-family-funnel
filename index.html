@@ -2349,16 +2349,21 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     const still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     let seed, rnd, paths=[], dots=[], running=[], lastW=0, inView=false;
     function mkRnd(){ seed=20262; rnd=()=>{seed=(seed*16807)%2147483647; return (seed-1)/2147483646;}; }
-    function rel(el,pad){ const r=el.getBoundingClientRect(), o=sec.getBoundingClientRect(); return {x0:r.left-o.left-pad,y0:r.top-o.top-pad,x1:r.right-o.left+pad,y1:r.bottom-o.top+pad}; }
+    function rel(el,pad){ const r=el.getBoundingClientRect(), o=sec.getBoundingClientRect(), z=o.width?sec.clientWidth/o.width:1; return {x0:(r.left-o.left)*z-pad,y0:(r.top-o.top)*z-pad,x1:(r.right-o.left)*z+pad,y1:(r.bottom-o.top)*z+pad}; }
     const hit=(b,x,y)=>x>b.x0&&x<b.x1&&y>b.y0&&y<b.y1;
     function build(){
       mkRnd(); running.forEach(a=>{try{a.cancel();}catch(e){}}); running=[];
       svg.innerHTML=''; paths=[]; dots=[];
-      const W=sec.clientWidth, S=sec.getBoundingClientRect(), A=art.getBoundingClientRect();
-      const artTop=A.top-S.top, artH=A.height; lastW=W;
+      const W=sec.clientWidth, S=sec.getBoundingClientRect(), A=art.getBoundingClientRect(), Z=S.width?W/S.width:1;
+      const artTop=(A.top-S.top)*Z, artH=A.height*Z; lastW=W;
       svg.setAttribute('viewBox','0 0 '+W+' '+sec.clientHeight);
-      const labels=[...art.querySelectorAll('.paths-l,.paths-r')].map(el=>rel(el,26));
       const em=sec.querySelector('.paths-cta .h2 em'), E=rel(em,0), Hd=rel(sec.querySelector('.paths-cta .h2'),0);
+      // keep the labels clear of the purple "you" line, which drops straight down onto STORY
+      const labEls=[...art.querySelectorAll('.paths-l,.paths-r')];
+      labEls.forEach(el=>{ el.style.transform=''; });
+      const youX=(E.x0+E.x1)/2;
+      labEls.forEach(el=>{ const b=rel(el,0); if(youX>b.x0-34&&youX<b.x1+34){ const dx=(youX<(b.x0+b.x1)/2)?(youX+34-b.x0):(youX-34-b.x1); el.style.transform='translateX('+dx.toFixed(1)+'px)'; } });
+      const labels=labEls.map(el=>rel(el,26));
       const cx=W/2, gap=Math.max(6,Math.min(10,W*.008)), N=W<640?18:26;
       const mobile=W<640;
       const specs=[];
@@ -2383,7 +2388,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
           const d=`M${x0.toFixed(1)} ${artTop-40} L${x0.toFixed(1)} ${ys.toFixed(1)} C${x0.toFixed(1)} ${(ys+k).toFixed(1)} ${xe.toFixed(1)} ${(mid-k).toFixed(1)} ${xe.toFixed(1)} ${mid.toFixed(1)} L${xe.toFixed(1)} ${ye.toFixed(1)}`;
           const probe=document.createElementNS(NSp,'path'); probe.setAttribute('d',d); svg.appendChild(probe);
           const L=probe.getTotalLength(); let bad=false;
-          for(let q=0;q<=36&&!bad;q++){ const pt=probe.getPointAtLength(L*q/36); if(labels.some(b=>hit(b,pt.x,pt.y))) bad=true; }
+          for(let q=0;q<=90&&!bad;q++){ const pt=probe.getPointAtLength(L*q/90); if(labels.some(b=>hit(b,pt.x,pt.y))) bad=true; }
           if(hit({x0:Hd.x0-20,y0:Hd.y0-50,x1:Hd.x1+20,y1:Hd.y1},xe,ye)) bad=true;
           probe.remove();
           if(!bad) ok={d,xe,ye,c:COLS[Math.floor(rnd()*COLS.length)]};
