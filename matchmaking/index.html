@@ -257,16 +257,10 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 @media (max-width:760px){.avatars span{font-size:9.5px}}
 @media (max-width:370px){.avatars span{font-size:8px}}
 .avatars span.more{background:#fff;color:var(--p);border-color:#fff;box-shadow:0 0 0 1px var(--line);font-size:18px;font-weight:600}
-.note{display:flex;align-items:flex-start;gap:14px;max-width:560px;margin:34px auto 0;padding:0;text-align:left}
-.note-av{position:relative;flex:none;width:52px;height:52px;border-radius:50%;background:#E2F2B8;color:#4E5A2E;display:grid;place-items:center;font:600 16px/1 'Inter',system-ui,sans-serif}
-.note-badge{position:absolute;right:-6px;bottom:-4px;width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 3px rgba(22,21,26,.18)}
-.note-badge svg{width:16px;height:16px;fill:var(--p);stroke:none}
-.note-badge svg circle{fill:#fff}
-.note-body{flex:1;min-width:0}
-.note blockquote{margin:0;background:#fff;border:1px solid var(--line);border-radius:4px 18px 18px 18px;padding:14px 18px;font-size:16px;line-height:1.55;color:var(--ink);box-shadow:0 6px 20px rgba(86,64,206,.08)}
-.note-redact{color:var(--p);font-weight:600}
-.note figcaption{margin:8px 0 0 4px;font-size:12px;color:var(--body);letter-spacing:.02em}
-@media (max-width:560px){.note{gap:10px;margin:26px auto 0}.note-av{width:40px;height:40px;font-size:13px}.note-badge{width:20px;height:20px}.note-badge svg{width:13px;height:13px}.note blockquote{font-size:15px;padding:12px 14px}}
+.note-shot{max-width:600px;margin:34px auto 0;padding:0}
+.note-shot img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(86,64,206,.12);background:#fff}
+.note-shot figcaption{margin-top:10px;font-size:12px;color:var(--body);letter-spacing:.02em}
+@media (max-width:560px){.note-shot{margin-top:26px}.note-shot img{border-radius:10px}}
 </style>
 </head>
 <body>
@@ -312,12 +306,9 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
     <div class="kicker">Servicing families in: &#127482;&#127480;</div>
     <h2 class="display">Matchmaking call for <span class="acc">your student</span></h2>
     <p>Answer 10 quick questions about your student: grade, goals and what&rsquo;s on your mind. Then, on a free 30-minute call, we&rsquo;ll tell you which vetted independent counselor fits and why. No sales pitch. We find your counselor, and we don&rsquo;t leave.</p>
-    <figure class="note" aria-label="Message from a family we matched">
-      <div class="note-av" aria-hidden="true">JN<span class="note-badge"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><circle cx="9" cy="10.5" r="1"/><circle cx="12" cy="10.5" r="1"/><circle cx="15" cy="10.5" r="1"/></svg></span></div>
-      <div class="note-body">
-        <blockquote>Thank you so much for your help to connect us with <span class="note-redact">[our counselor]</span>. I am glad that I found you online.</blockquote>
-        <figcaption>A parent we matched &middot; 4:43 AM</figcaption>
-      </div>
+    <figure class="note-shot">
+      <img src="family-message.png" width="973" height="194" alt="Message from a parent: Thank you so much for your help to connect us with [counselor name hidden]. I am glad that I found you online." loading="lazy">
+      <figcaption>A real message from a parent we matched</figcaption>
     </figure>
     <a class="cta" id="start" href="quiz.html">Get started &rarr;</a>
     <div class="hint">Takes about 2 minutes</div>
