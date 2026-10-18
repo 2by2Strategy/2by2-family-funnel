@@ -8,7 +8,7 @@
 <title>2by2 Academy – Find the Counselor Who Fits</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:only light;
   --p:#5640CE; --p2:#8F75EF; --ink:#16151A; --body:#5C5C66; --line:#DDD5F8; --soft:#F7F4FE;
@@ -258,9 +258,24 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 @media (max-width:370px){.avatars span{font-size:8px}}
 .avatars span.more{background:#fff;color:var(--p);border-color:#fff;box-shadow:0 0 0 1px var(--line);font-size:18px;font-weight:600}
 .note-shot{max-width:600px;margin:34px auto 0;padding:0}
+.ns-wrap{position:relative;display:flex;flex-direction:column}
+.ns-img{position:relative}
 .note-shot img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(86,64,206,.12);background:#fff}
+.intro .note-shot .ns-ann{font-family:'Caveat',cursive;font-weight:600;color:var(--p);font-size:28px;line-height:1;margin:0;text-align:left}
+.ns-arrow{position:absolute;overflow:visible;pointer-events:none}
+.ns-arrow path{fill:none;stroke:var(--p);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .note-shot figcaption{margin-top:10px;font-size:12px;color:var(--body);letter-spacing:.02em}
-@media (max-width:560px){.note-shot{margin-top:26px}.note-shot img{border-radius:10px}}
+@media (min-width:1140px){
+  .intro .note-shot .ns-ann{position:absolute;left:calc(100% + 34px);top:-46px;width:210px}
+  .ns-arrow-lg{left:86%;bottom:calc(77% - 6px);width:120px;height:70px}
+  .ns-arrow-sm{display:none}
+}
+@media (max-width:1139px){
+  .ns-arrow-lg{display:none}
+  .intro .note-shot .ns-ann{order:-1;align-self:flex-end;text-align:right;max-width:260px;margin:0 2% 30px 0;font-size:25px}
+  .ns-arrow-sm{left:calc(83% - 12px);bottom:calc(77% + 2px);width:70px;height:46px}
+}
+@media (max-width:560px){.note-shot{margin-top:26px}.note-shot img{border-radius:10px}.intro .note-shot .ns-ann{font-size:23px;max-width:220px;margin-bottom:34px}}
 </style>
 </head>
 <body>
@@ -307,7 +322,14 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
     <h2 class="display">Matchmaking call for <span class="acc">your student</span></h2>
     <p>Answer 10 quick questions about your student: grade, goals and what&rsquo;s on your mind. Then, on a free 30-minute call, we&rsquo;ll tell you which vetted independent counselor fits and why. No sales pitch. We find your counselor, and we don&rsquo;t leave.</p>
     <figure class="note-shot">
-      <img src="family-message.png" width="973" height="159" alt="Message from a parent: Thank you so much for your help to connect us with [matched counselor]. I am glad that I found you online." loading="lazy">
+      <div class="ns-wrap">
+        <p class="ns-ann">Personally matched counselor for her specific student</p>
+        <div class="ns-img">
+        <img src="family-message.png" width="973" height="159" alt="Message from a parent: Thank you so much for your help to connect us with [counselor name hidden]. I am glad that I found you online." loading="lazy">
+        <svg class="ns-arrow ns-arrow-lg" viewBox="0 0 120 70" aria-hidden="true"><path d="M6 64 C 16 26, 52 10, 108 15"/><path d="M96 6 L109 15 L97 25"/></svg>
+        <svg class="ns-arrow ns-arrow-sm" viewBox="0 0 90 60" aria-hidden="true"><path d="M84 6 C 62 8, 30 14, 16 50"/><path d="M8 40 L16 52 L26 42"/></svg>
+        </div>
+      </div>
       <figcaption>A real message from a parent we matched</figcaption>
     </figure>
     <a class="cta" id="start" href="quiz.html">Get started &rarr;</a>
