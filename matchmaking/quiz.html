@@ -392,7 +392,7 @@ function flat(){ // readable, flat copy of the answers for GoHighLevel custom fi
     biggest_concerns:optLabel('concern',A.concern), student_grade:optLabel('grade',A.grade), student_gpa:optLabel('gpa',A.gpa),
     college_goals:optLabel('colleges',A.colleges), counselor_wanted:A.describe||'', sms_consent:A.consent?'Yes':'No',
     utm_source:UTM.utm_source||'', utm_medium:UTM.utm_medium||'', utm_campaign:UTM.utm_campaign||'', utm_content:UTM.utm_content||'', utm_term:UTM.utm_term||'',
-    fbclid:UTM.fbclid||'', gclid:UTM.gclid||'', landing_page:UTM.landing_page||'', referrer:UTM.referrer||'', first_seen:UTM.first_seen||''}; }
+    fbclid:UTM.fbclid||'', gclid:UTM.gclid||'', ad_click_id:UTM.fbclid?('fbclid: '+UTM.fbclid):(UTM.gclid?('gclid: '+UTM.gclid):''), landing_page:UTM.landing_page||'', referrer:UTM.referrer||'', first_seen:UTM.first_seen||''}; }
 function send(stage){
   var payload={stage:stage, sid:SID, answers:A, f:flat(), utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-family-funnel'};
   if(SHEET_URL){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'quiz'},payload)),keepalive:true}); }catch(e){} }
