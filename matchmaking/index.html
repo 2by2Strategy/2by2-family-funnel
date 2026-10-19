@@ -232,7 +232,7 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .hero .dots{display:none}
 .hero .shade{background:radial-gradient(700px 500px at 85% 0%,rgba(143,117,239,.35),rgba(143,117,239,0) 70%)}
 .hero-copy{padding:44px 44px 30px}
-.hchart{display:block;width:100%;height:auto;max-width:100%;margin-top:22px}
+.hchart{display:block;width:100%;height:auto;max-width:100%;margin-top:22px;overflow:visible}
 .hc-axis{stroke:rgba(255,255,255,.14);stroke-width:1.5;fill:none}
 .hc-axlab{font:italic 600 15px 'Inter',system-ui,sans-serif;fill:rgba(255,255,255,.55)}
 .hc-line{fill:none;stroke-linecap:round}
@@ -302,6 +302,7 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
         <path id="hcCounsel" class="hc-line hc-counsel" d=""/>
         <path id="hcRise" class="hc-line hc-rise" d=""/>
         <g id="hcMs" class="hc-ms"></g>
+        <g id="hcConf" aria-hidden="true"></g>
         <circle id="hcDot" class="hc-dot" r="0" cx="0" cy="0"/>
         <text id="hcMatch" class="hc-matchlab display" x="0" y="0" opacity="0">Matched</text>
         <text id="hcLabS" class="hc-lab hc-s" opacity="0">Your student</text>
@@ -380,6 +381,13 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   var ms=[['School list',.22],['Essays',.48],['Applications',.74],['Decisions',1]].map(function(m){var q=R.getPointAtLength(L.hcRise*m[1]);return [m[0],q.x,q.y,m[1]];});
   var G=$('hcMs');
   ms.forEach(function(m){var g=document.createElementNS(NS,'g');g.setAttribute('opacity','0');g.innerHTML='<circle r="6" cx="'+m[1]+'" cy="'+m[2]+'"/><text x="'+m[1]+'" y="'+(m[2]-16)+'" text-anchor="'+(m[3]===1?'end':'middle')+'">'+m[0]+'</text>';G.appendChild(g);});
+  var CF=$('hcConf'),CX=900,CY=52,cps=[],cols=['#8F75EF','#C9B8FF','#FFFFFF','#FF6F7D','#FFD166','#8F75EF','#FFFFFF','#FFD166'];
+  [-62,-50,-40,-30,-20,-10,0,10,20,30,42,54,66,78,-56,-24,6,36].forEach(function(deg,i){
+    var r=document.createElementNS(NS,i%3===2?'circle':'rect'),a=deg*Math.PI/180,d=30+(i*17%28);
+    if(i%3===2){r.setAttribute('r',3.6);}else{r.setAttribute('width',6);r.setAttribute('height',11);r.setAttribute('x',-3);r.setAttribute('y',-5.5);r.setAttribute('rx',1.2);}
+    r.setAttribute('fill',cols[i%cols.length]);r.setAttribute('opacity','0');CF.appendChild(r);
+    cps.push({el:r,dx:Math.cos(a)*d,dy:Math.sin(a)*d,spin:(i%2?1:-1)*(120+i*23)});
+  });
   var dot=$('hcDot'),ml=$('hcMatch'),lS=$('hcLabS'),lC=$('hcLabC'),lF=$('hcLabF');
   dot.setAttribute('cx',mx);dot.setAttribute('cy',my);ml.setAttribute('x',mx);ml.setAttribute('y',my-28);ml.setAttribute('text-anchor','middle');
   lS.setAttribute('x',112);lS.setAttribute('y',348);lC.setAttribute('x',152);lC.setAttribute('y',104);lF.setAttribute('x',900);lF.setAttribute('y',230);
@@ -389,6 +397,8 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
     S.style.strokeDashoffset=L.hcStudent*(1-p1);C.style.strokeDashoffset=L.hcCounsel*(1-p1);
     R.style.strokeDashoffset=L.hcRise*(1-p2);F.style.strokeDashoffset=L.hcFlat*(1-pf);
     var a=cl(t/500);lS.setAttribute('opacity',a);lC.setAttribute('opacity',a);lF.setAttribute('opacity',cl((t-3900)/400));
+    var pc=cl((t-4250)/650),pe=1-Math.pow(1-pc,3);
+    cps.forEach(function(q){q.el.setAttribute('opacity',pc>0?Math.min(1,pc*4):0);q.el.setAttribute('transform','translate('+(CX+q.dx*pe)+' '+(CY+q.dy*pe+6*pc*pc)+') rotate('+(q.spin*pe)+')');});
     var mp=cl((t-1500)/350);dot.setAttribute('r',13*ease(mp));ml.setAttribute('opacity',mp);
     guide.setAttribute('opacity',cl((t-1600)/500)*.7);
     [].forEach.call(G.children,function(g,i){g.setAttribute('opacity',cl((t-(1700+2600*ms[i][3]*.92))/300));});
