@@ -4,6 +4,7 @@
 <meta name="color-scheme" content="only light">
 <meta name="darkreader-lock">
 <meta charset="utf-8">
+<script src="../track.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2by2 Academy – Matchmaking Questions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -380,8 +381,8 @@ function renderDone(){
 }
 
 /* tracking + lead capture */
-var UTM={}; (function(){ var p=new URLSearchParams(location.search); ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(function(k){ if(p.get(k)) UTM[k]=p.get(k); }); })();
-function track(ev,data){ try{ if(window.fbq){ if(ev==='Lead'||ev==='Schedule') fbq('track',ev); else fbq('trackCustom','QuizAnswer',data||{}); } }catch(e){} }
+var UTM={}; (function(){ var a=window.TWOBY2_ATTR||{}; for(var k in a) UTM[k]=a[k]; var p=new URLSearchParams(location.search); ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(function(k){ if(p.get(k)) UTM[k]=p.get(k); }); })();
+function track(ev,data){ try{ if(!window.tt) return; if(ev==='Lead') tt('Lead',{content_name:'matchmaking quiz'}); else if(ev==='Schedule') tt('BookingClick'); else tt('QuizStep',{step:(data&&data.q)||''}); }catch(e){} }
 var SID=(function(){ try{ return (crypto.randomUUID&&crypto.randomUUID())||String(Date.now())+Math.random().toString(36).slice(2); }catch(e){ return String(Date.now())+Math.random().toString(36).slice(2); } })();
 function optLabel(id,v){ var s=STEPS.filter(function(x){return x.id===id})[0]; if(!s||!s.opts) return v==null?'':String(v);
   var vals=Array.isArray(v)?v:(v==null?[]:[v]); return vals.map(function(x){ var o=s.opts.filter(function(p){return p[0]===x})[0]; return o?o[1]:x; }).join(', '); }
@@ -390,7 +391,8 @@ function flat(){ // readable, flat copy of the answers for GoHighLevel custom fi
     quiz_filled_by:A.role==='student'?'Student':(A.role==='parent'?'Parent':''), readiness:A.ready!=null?String(A.ready):'',
     biggest_concerns:optLabel('concern',A.concern), student_grade:optLabel('grade',A.grade), student_gpa:optLabel('gpa',A.gpa),
     college_goals:optLabel('colleges',A.colleges), counselor_wanted:A.describe||'', sms_consent:A.consent?'Yes':'No',
-    utm_source:UTM.utm_source||'', utm_campaign:UTM.utm_campaign||''}; }
+    utm_source:UTM.utm_source||'', utm_medium:UTM.utm_medium||'', utm_campaign:UTM.utm_campaign||'', utm_content:UTM.utm_content||'', utm_term:UTM.utm_term||'',
+    fbclid:UTM.fbclid||'', gclid:UTM.gclid||'', landing_page:UTM.landing_page||'', referrer:UTM.referrer||'', first_seen:UTM.first_seen||''}; }
 function send(stage){
   var payload={stage:stage, sid:SID, answers:A, f:flat(), utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-family-funnel'};
   if(SHEET_URL){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'quiz'},payload)),keepalive:true}); }catch(e){} }

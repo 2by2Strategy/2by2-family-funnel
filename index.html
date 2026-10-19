@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
+<script src="track.js"></script>
 <meta name="color-scheme" content="only light">
 <meta name="darkreader-lock">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -2093,10 +2094,10 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   const TX_GHL='https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/31c821a5-d367-4bc0-8bd3-df5757bdd1dd';   // TODO: GoHighLevel inbound webhook URL
   const txQs=[]; let txLead=null, txEl=null;
   const txSid=(()=>{try{return crypto.randomUUID()}catch(e){return Date.now()+''+Math.random().toString(36).slice(2)}})();
-  const txUtm=(()=>{const o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
+  const txUtm=(()=>{const o=Object.assign({},window.TWOBY2_ATTR||{}),p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
   function txSend(stage){
     if(!txLead) return;
-    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat',f:{first_name:txLead.name,phone:'+1'+txLead.phone,sms_consent:txLead.sms?'Yes':'No',chat_questions:txQs.map((q,i)=>(i+1)+'. '+(typeof q==='string'?q:(q&&(q.q||q.text||q.question))||'')).join('\n'),utm_source:txUtm.utm_source||'',utm_campaign:txUtm.utm_campaign||''}};
+    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat',f:{first_name:txLead.name,phone:'+1'+txLead.phone,sms_consent:txLead.sms?'Yes':'No',chat_questions:txQs.map((q,i)=>(i+1)+'. '+(typeof q==='string'?q:(q&&(q.q||q.text||q.question))||'')).join('\n'),utm_source:txUtm.utm_source||'',utm_medium:txUtm.utm_medium||'',utm_campaign:txUtm.utm_campaign||'',utm_content:txUtm.utm_content||'',utm_term:txUtm.utm_term||'',fbclid:txUtm.fbclid||'',gclid:txUtm.gclid||'',landing_page:txUtm.landing_page||'',referrer:txUtm.referrer||'',first_seen:txUtm.first_seen||''}};
     try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),keepalive:true})}catch(e){}
     if(TX_GHL){try{fetch(TX_GHL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true})}catch(e){}}
   }
@@ -2117,7 +2118,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       if(!/^[A-Za-z\u00C0-\u00FF' .-]{2,}$/.test(name)){err.textContent='Add your first name.';return;}
       if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(ph)){err.textContent='Enter a 10-digit US mobile number.';return;}
       const okSms=el.querySelector('#txOk').checked;
-      txLead={name,phone:ph,sms:okSms}; txSend('new'); track('chat_text_me',{questions:txQs.length});
+      txLead={name,phone:ph,sms:okSms}; txSend('new');try{window.tt&&tt('Contact',{content_name:'website chat'})}catch(e){}; track('chat_text_me',{questions:txQs.length});
       const nm=name.replace(/[<>&"]/g,'');
       el.innerHTML=okSms?'<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+nm+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>':'<span class="tx-k">Got it</span><p class="tx-h">Thanks, '+nm+'.</p><p class="tx-p">You didn\u2019t opt in to texts, so a 2by2 matchmaker will call you at \u2022\u2022\u2022 '+ph.slice(-4)+' instead. Keep asking here and we\u2019ll add it to your conversation.</p>';
       thread.scrollTop=thread.scrollHeight;

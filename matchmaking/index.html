@@ -4,6 +4,7 @@
 <meta name="color-scheme" content="only light">
 <meta name="darkreader-lock">
 <meta charset="utf-8">
+<script src="../track.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2by2 Academy – Find the Counselor Who Fits</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -361,7 +362,7 @@ function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp
   if(HERO_IMAGE){ document.getElementById('heroImg').style.backgroundImage='url("'+HERO_IMAGE+'")'; document.getElementById('hero').classList.add('has-img'); }
 })();
 document.getElementById('start').href = QUIZ_URL + location.search;
-document.getElementById('start').addEventListener('click',function(){ try{ if(window.fbq) fbq('trackCustom','StartQuiz'); }catch(e){} });
+document.getElementById('start').addEventListener('click',function(){ try{ if(window.tt) tt('StartQuiz',{from:'matchmaking'}); }catch(e){} });
 
 /* hero chart animation */
 (function(){
