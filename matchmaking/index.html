@@ -374,6 +374,8 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   var S=$('hcStudent'),C=$('hcCounsel'),R=$('hcRise'),F=$('hcFlat'),guide=$('hcGuide');
   S.setAttribute('d',dS);C.setAttribute('d',dC);R.setAttribute('d',dR);F.setAttribute('d',dF);guide.setAttribute('d','M'+mx+' '+(my+18)+' L '+mx+' '+Y0);
   var L={};[S,C,R,F].forEach(function(p){L[p.id]=p.getTotalLength();p.style.strokeDasharray=L[p.id];});
+  var FX=[];for(var k=0;k<=240;k++){var fl=L.hcFlat*k/240;FX.push([fl,F.getPointAtLength(fl).x]);}
+  function flatLenAtX(x){if(x<=FX[0][1])return 0;for(var k=1;k<FX.length;k++){if(FX[k][1]>=x){var A=FX[k-1],B=FX[k];return A[0]+(B[0]-A[0])*((x-A[1])/((B[1]-A[1])||1));}}return L.hcFlat;}
   var ms=[['School list',.22],['Essays',.48],['Applications',.74],['Decisions',1]].map(function(m){var q=R.getPointAtLength(L.hcRise*m[1]);return [m[0],q.x,q.y,m[1]];});
   var G=$('hcMs');
   ms.forEach(function(m){var g=document.createElementNS(NS,'g');g.setAttribute('opacity','0');g.innerHTML='<circle r="6" cx="'+m[1]+'" cy="'+m[2]+'"/><text x="'+m[1]+'" y="'+(m[2]-16)+'" text-anchor="'+(m[3]===1?'end':'middle')+'">'+m[0]+'</text>';G.appendChild(g);});
@@ -392,7 +394,7 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   function frame(t,raw){
     var p1=ease(cl(t/1600)),p2=ease(cl((t-1700)/2600)),pf=ease(cl(t/4300));
     S.style.strokeDashoffset=L.hcStudent*(1-p1);C.style.strokeDashoffset=L.hcCounsel*(1-p1);
-    R.style.strokeDashoffset=L.hcRise*(1-p2);F.style.strokeDashoffset=L.hcFlat*(1-pf);
+    R.style.strokeDashoffset=L.hcRise*(1-p2);var hx=p2>0?R.getPointAtLength(L.hcRise*p2).x:S.getPointAtLength(L.hcStudent*p1).x;if(p1<=0)hx=0;F.style.strokeDashoffset=L.hcFlat-flatLenAtX(hx);
     var a=cl(t/500);lS.setAttribute('opacity',a);lC.setAttribute('opacity',a);lF.setAttribute('opacity',cl((t-3900)/400));
     cps.forEach(function(q){var e=(raw==null?-1:raw-q.b);
       if(e<0||e>LIFE){q.el.setAttribute('opacity',0);return;}
