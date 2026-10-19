@@ -3,7 +3,7 @@
    Every page loads this file; pages call window.tt(name, params) for funnel events. */
 (function () {
   var META_PIXEL_ID = '';   // e.g. '123456789012345' (Meta Events Manager > Data sources)
-  var GA4_ID        = '';   // e.g. 'G-XXXXXXXXXX'    (Google Analytics > Admin > Data streams)
+  var GA4_ID        = 'G-ZT24DXBJMW';   // 2by2academy.co web stream (jackson@2by2academy.co)    (Google Analytics > Admin > Data streams)
 
   /* ---------- first-touch attribution (stored in this browser for 90 days) ---------- */
   var KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid'];
