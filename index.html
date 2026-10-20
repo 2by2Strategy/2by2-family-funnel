@@ -2856,6 +2856,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   let dbP=null;
   function getDb(){ if(!dbP) dbP=(window.claude&&window.claude.use)?Promise.all([window.claude.use('db').catch(()=>null),window.claude.use('user').catch(()=>null)]):Promise.resolve([null,null]); return dbP; }
+  const JOIN_GHL='';   // GHL inbound webhook for the join form (Website: Join Form to GHL); empty = off
   const SHEET_URL='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
   function loadSheetCounts(){ fetch(SHEET_URL+'?t='+Date.now()).then(r=>r.json()).then(j=>{ if(j&&j.states){ const c={}; Object.keys(j.states).forEach(s=>{ if(STATES[s]) c[s]=+j.states[s]||0; }); counts=c; paint(); } }).catch(()=>{}); }
   getDb().then(([db])=>{ if(!db){ loadSheetCounts(); return; }
@@ -2930,6 +2931,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       else showResult('Your closest 2by2 family','You’re first in '+me.name,'About '+fmt(GRADS[state])+' students graduate in '+me.name+' this year. You’d be the first 2by2 family there.');
     }
 
+    if(JOIN_GHL){try{const u=window.TWOBY2_ATTR||{},q=new URLSearchParams(location.search),g=k=>q.get(k)||u[k]||'';fetch(JOIN_GHL,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({type:'join-form',source:'website join form',page:location.href,ts:new Date().toISOString(),f:{first_name:name.split(' ')[0],full_name:name,email,phone:phone.replace(/\D/g,'').length===10?'+1'+phone.replace(/\D/g,''):phone,high_school:school,postal_code:zip,state,newsletter:news?'Yes':'No',sms_consent:sms?'Yes':'No',utm_source:g('utm_source'),utm_medium:g('utm_medium'),utm_campaign:g('utm_campaign'),utm_content:g('utm_content'),utm_term:g('utm_term'),fbclid:g('fbclid'),gclid:g('gclid'),landing_page:u.landing_page||'',referrer:u.referrer||''}})})}catch(e){}}
     const [db,user]=await getDb();
     if(!db){
       try{
