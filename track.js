@@ -2,7 +2,7 @@
    Fill in the two IDs below. Leave one blank to switch that platform off.
    Every page loads this file; pages call window.tt(name, params) for funnel events. */
 (function () {
-  var META_PIXEL_ID = '';   // e.g. '123456789012345' (Meta Events Manager > Data sources)
+  var META_PIXEL_ID = '1640187167617419';   // 2by2 Academy dataset (Meta Events Manager, business portfolio 2by2 Academy)
   var GA4_ID        = 'G-ZT24DXBJMW';   // 2by2academy.co web stream (jackson@2by2academy.co)    (Google Analytics > Admin > Data streams)
 
   /* ---------- first-touch attribution (stored in this browser for 90 days) ---------- */
