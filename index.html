@@ -2857,7 +2857,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   let dbP=null;
   function getDb(){ if(!dbP) dbP=(window.claude&&window.claude.use)?Promise.all([window.claude.use('db').catch(()=>null),window.claude.use('user').catch(()=>null)]):Promise.resolve([null,null]); return dbP; }
-  const JOIN_GHL='';   // GHL inbound webhook for the join form (Website: Join Form to GHL); empty = off
+  const JOIN_GHL='https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/9b2873f8-e63f-40a9-9ce4-8241d6b55c67';   // GHL inbound webhook for the join form (Website: Join Form to GHL); empty = off
   const SHEET_URL='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
   function loadSheetCounts(){ fetch(SHEET_URL+'?t='+Date.now()).then(r=>r.json()).then(j=>{ if(j&&j.states){ const c={}; Object.keys(j.states).forEach(s=>{ if(STATES[s]) c[s]=+j.states[s]||0; }); counts=c; paint(); } }).catch(()=>{}); }
   getDb().then(([db])=>{ if(!db){ loadSheetCounts(); return; }
