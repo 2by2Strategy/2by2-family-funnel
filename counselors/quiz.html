@@ -225,7 +225,7 @@ function you(){return isFirm()?'your firm':'you'}
 var STEPS = [
   {id:'role', type:'single', title:function(){return 'Are you an independent college counselor?'},
    opts:[['solo','Yes, I run my own practice','person'],['firm','Yes, I run a firm with other counselors','firm'],['school','I’m a school-based counselor','school'],['other','Not a counselor yet','help']]},
-  {id:'name', type:'name', title:function(){return 'What’s your name?'}, sub:function(){return 'So we know who we’re talking to.'}},
+  {id:'name', type:'name', title:function(){return 'What’s your name and business?'}, sub:function(){return 'So we know who we’re talking to.'}},
   {id:'capacity', type:'scale', title:function(){return 'How full is '+(isFirm()?'your firm’s':'your')+' calendar this admissions cycle?'},
    sub:function(){return '1 = wide open, 10 = fully booked'}, ends:['Wide open','Fully booked']},
   {id:'background', type:'multi', title:function(){return 'What’s your background?'}, sub:function(){return 'Select all that apply.'}, cols:3,
@@ -279,7 +279,8 @@ function render(focus){
   }
   if(s.type==='name'){
     h+='<div class="fields"><div class="two"><div><label for="fn">First name</label><input class="field" id="fn" autocomplete="given-name" placeholder="First name" value="'+esc(A.firstName||'')+'"></div>'+
-       '<div><label for="ln">Last name</label><input class="field" id="ln" autocomplete="family-name" placeholder="Last name" value="'+esc(A.lastName||'')+'"></div></div></div>'+
+       '<div><label for="ln">Last name</label><input class="field" id="ln" autocomplete="family-name" placeholder="Last name" value="'+esc(A.lastName||'')+'"></div></div>'+
+       '<div><label for="bn">'+(isFirm()?'Firm name':'Business name')+'</label><input class="field" id="bn" autocomplete="organization" placeholder="'+(isFirm()?'Your firm’s name':'Your practice’s name')+'" value="'+esc(A.business||'')+'"></div></div>'+
        '<div class="err" id="err"></div><button class="cta" id="next" type="button">OK &rarr;</button><div class="hint">press <b>Enter &crarr;</b></div>';
   }
   if(s.type==='text'){
@@ -330,7 +331,7 @@ function bind(s){
     };});
   }
   if(s.type==='name'){
-    var go1=function(){ var f=val('fn'), l=val('ln'); if(!f) return err('Please add your first name.'); A.firstName=f; A.lastName=l; next(); };
+    var go1=function(){ var f=val('fn'), l=val('ln'), bz=val('bn'); if(!f) return err('Please add your first name.'); if(!bz) return err(isFirm()?'Please add your firm’s name.':'Please add your business name.'); A.firstName=f; A.lastName=l; A.business=bz; next(); };
     document.getElementById('next').onclick=go1; enter(go1);
   }
   if(s.type==='text'){
@@ -404,7 +405,7 @@ function optLabel(id,v){ var s=STEPS.filter(function(x){return x.id===id})[0]; i
   var vals=Array.isArray(v)?v:(v==null?[]:[v]); return vals.map(function(x){ var o=s.opts.filter(function(p){return p[0]===x})[0]; return o?o[1]:x; }).join(', '); }
 function roleLabel(){ return {solo:'Independent counselor (solo)',firm:'Firm owner',  'school-private':'School counselor, takes private clients'}[A.role]||''; }
 function flat(){ // readable, flat copy of the answers for GoHighLevel custom fields
-  return {first_name:A.firstName||'', last_name:A.lastName||'', email:A.email||'', phone:A.phone?((A.cc||'+1')+String(A.phone).replace(/\D/g,'')):'', website:A.website||'',
+  return {first_name:A.firstName||'', last_name:A.lastName||'', business_name:A.business||'', email:A.email||'', phone:A.phone?((A.cc||'+1')+String(A.phone).replace(/\D/g,'')):'', website:A.website||'',
     counselor_type:roleLabel(), calendar_fullness:A.capacity!=null?String(A.capacity):'', background:optLabel('background',A.background),
     families_per_year:optLabel('families',A.families), package_price:optLabel('price',A.price), lead_sources:optLabel('sources',A.sources),
     biggest_need:optLabel('want',A.want), best_fit_students:A.describe||'', sms_consent:A.consent?'Yes':'No',
