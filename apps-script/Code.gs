@@ -16,6 +16,7 @@ function doPost(e) {
   if (d.website) return json_({ ok: true }); // honeypot field: bots fill it, people don't
   if (d.type === 'quiz') return quiz_(d);
   if (d.type === 'chat') return chat_(d);
+  if (d.type === 'counselor') return counselor_(d);
   var name = clean_(d.name, 120), email = clean_(d.email, 160);
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json_({ ok: false, error: 'missing fields' });
   var state = String(d.state || '').toUpperCase();
@@ -95,6 +96,36 @@ function chat_(d) {
     var vals = [first, new Date(), name, "'" + phone, qs.join('\n\n'), qs.length, d.consent ? 'Yes' : 'No',
       clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200), clean_(d.page, 300), sid];
     if (row) sh.getRange(row, 1, 1, vals.length).setValues([vals]); else sh.appendRow(vals);
+  } finally { lock.releaseLock(); }
+  return json_({ ok: true });
+}
+
+/* ---------- Counselor questionnaire (tab "Counselor Quiz", page counselors/quiz.html) ---------- */
+var COUNSELOR_HEAD = ['First seen','Last update','Status','Clicked "Choose a time"','Counselor type','First name','Last name','Email','Phone','Website',
+  'Calendar fullness (1-10)','Background','New families / year','Package price','Where families come from','Biggest need','Best-fit students','Consent',
+  'utm_source','utm_medium','utm_campaign','utm_content','fbclid','gclid','Page','Session'];
+function counselor_(d) {
+  var a = d.answers || {}, f = d.f || {}, u = d.utm || {}, sid = clean_(d.sid, 60);
+  if (!sid) return json_({ ok: false, error: 'no session' });
+  var lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Counselor Quiz');
+    if (!sh) { sh = ss.insertSheet('Counselor Quiz'); sh.appendRow(COUNSELOR_HEAD); sh.setFrozenRows(1); sh.getRange(1, 1, 1, COUNSELOR_HEAD.length).setFontWeight('bold'); }
+    var last = sh.getLastRow(), row = 0;
+    if (last > 1) {
+      var ids = sh.getRange(2, COUNSELOR_HEAD.length, last - 1, 1).getValues();
+      for (var i = ids.length - 1; i >= 0; i--) { if (ids[i][0] === sid) { row = i + 2; break; } }
+    }
+    var prev = row ? sh.getRange(row, 1, 1, COUNSELOR_HEAD.length).getValues()[0] : null;
+    var status = { partial: 'Started (left email)', complete: 'Completed', book: 'Completed' }[d.stage] || 'Started';
+    if (prev && prev[2] === 'Completed' && d.stage === 'partial') status = 'Completed';
+    var values = [prev ? prev[0] : new Date(), new Date(), status, d.stage === 'book' ? 'Yes' : (prev ? prev[3] : 'No'),
+      clean_(f.counselor_type), clean_(a.firstName, 80), clean_(a.lastName, 80), clean_(a.email, 160), clean_((a.cc || '') + ' ' + (a.phone || ''), 40),
+      clean_(a.website, 200), clean_(a.capacity, 5), clean_(f.background, 300), clean_(f.families_per_year, 40), clean_(f.package_price, 40),
+      clean_(f.lead_sources, 300), clean_(f.biggest_need, 300), clean_(a.describe, 2000), a.consent ? 'Yes' : (prev ? prev[17] : 'No'),
+      clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200),
+      clean_(d.page, 300), sid];
+    if (row) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
   } finally { lock.releaseLock(); }
   return json_({ ok: true });
 }
