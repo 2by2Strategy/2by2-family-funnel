@@ -11,6 +11,7 @@
 Edit the SETTINGS block at the top of the `<script>` in each file:
 - `matchmaking/quiz.html`: `BOOKING_URL` (2by2 calendar link), `WEBHOOK_URL` (GoHighLevel inbound webhook)
 - `counselors/quiz.html`: `BOOKING_URL` (counselor fit-call calendar), `WEBHOOK_URL` (a separate GHL webhook for counselors)
+  - Who gets screened out ("might not be the right fit yet" + email list) is set in `notAFit()` in the same script
 - `matchmaking/index.html`: `PROOF` (rating, families matched, family photos)
 
 Hosted with GitHub Pages from the `main` branch.
