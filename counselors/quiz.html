@@ -242,12 +242,14 @@ var STEPS = [
    opts:[['referrals','Referrals and word of mouth','share'],['ads','My own ads','megaphone'],['directories','Directories or lead sites','list'],['social','Social media or content','heart'],['site','My website or search','globe'],['none','Nothing consistent','none']]},
   {id:'want', type:'multi', title:function(){return 'What would make the biggest difference for '+(isFirm()?'your firm':'your practice')+'?'}, sub:function(){return 'Select all that apply.'},
    opts:[['fit','More families who fit how I work','match'],['steady','A steady flow every month, not just in the fall','calendar'],['time','Less time chasing and qualifying leads','clock'],['briefed','Families who show up already briefed','chat'],['grow','Room to grow beyond referrals','trend']]},
+  {id:'describe', type:'text', title:function(){return 'Tell us about '+(isFirm()?'your firm':'your business')},
+   sub:function(){return 'Optional. What you offer, the students you work with best and what makes '+(isFirm()?'your firm':'your practice')+' different.'}},
+  {id:'found', type:'single', other:'other', title:function(){return 'How did you find us?'}, cols:3,
+   opts:[['ads','Ads'],['instagram','Instagram'],['facebook','Facebook'],['website','Website'],['referral','Referral'],['other','Other']]},
   {id:'start', type:'single', title:function(){return 'When are you looking to get started?'}, cols:3,
    opts:[['now','Immediately','bolt'],['2w','In the next 2 weeks','calendar'],['2-4w','2–4 weeks','calendar'],['4-6w','4–6 weeks','calendar'],['6w+','6+ weeks','hourglass'],['exploring','Just exploring for now','eye']]},
   {id:'invest', type:'single', title:function(){return 'Are you able to invest at least $3,000 into '+(isFirm()?'your firm':'your business')+' to start scaling?'}, cols:3,
    opts:[['yes','Yes, I’m ready to invest','check'],['call','Yes, if it makes sense after the call','help'],['no','Not right now','none']]},
-  {id:'describe', type:'text', title:function(){return 'Describe the students you do your best work with'},
-   sub:function(){return 'Optional. Grades, goals, specialties, the families you click with. This is what we match on.'}},
   {id:'contact', type:'contact', title:function(){return 'Let’s book your fit call'},
    sub:function(){return 'A free 30-minute call to walk you through how 2by2 matches families to counselors, and whether '+you()+(isFirm()?' fits':' fit')+' the network.'}},
   {id:'done', type:'done'}
@@ -278,6 +280,9 @@ function render(focus){
       h+='<button type="button" class="opt'+(on?' on':'')+'" data-v="'+o[0]+'" aria-pressed="'+on+'">'+ic(o[2])+'<span>'+o[1]+'</span></button>';
     });
     h+='</div>';
+    if(s.other){ var oo=cur===s.other, sh=oo?'':' style="display:none"';
+      h+='<div class="fields" id="ob"'+sh+'><div><label for="ot">Where did you hear about us?</label><input class="field" id="ot" placeholder="Type your answer here…" value="'+esc(A[s.id+'Other']||'')+'"></div></div>'+
+         '<div class="err" id="err"></div><button class="cta" id="next" type="button"'+sh+'>Continue &rarr;</button>'; }
     if(s.type==='multi') h+='<div class="err" id="err"></div><button class="cta" id="next" type="button">Continue &rarr;</button>';
   }
   if(s.type==='scale'){
@@ -321,8 +326,12 @@ function bind(s){
       A[s.id]=b.dataset.v; stage.querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b)});
       track('answer',{q:s.id});
       if(s.id==='role' && (b.dataset.v==='school'||b.dataset.v==='other')){ fitNotice(b.dataset.v); return; }
+      if(s.other){ var show=b.dataset.v===s.other; document.getElementById('ob').style.display=show?'':'none'; document.getElementById('next').style.display=show?'':'none'; err('');
+        if(show){ document.getElementById('ot').focus(); return; } A[s.id+'Other']=''; }
       setTimeout(next,220);
     };});
+    if(s.other){ var goO=function(){ var t=val('ot'); if(!t) return err('Please tell us where you heard about us.'); A[s.id+'Other']=t; next(); };
+      document.getElementById('next').onclick=goO; enter(goO); }
   }
   if(s.type==='multi'){
     A[s.id]=A[s.id]||[];
@@ -416,7 +425,7 @@ function flat(){ // readable, flat copy of the answers for GoHighLevel custom fi
   return {first_name:A.firstName||'', last_name:A.lastName||'', business_name:A.business||'', email:A.email||'', phone:A.phone?((A.cc||'+1')+String(A.phone).replace(/\D/g,'')):'', website:A.website||'',
     counselor_type:roleLabel(), calendar_fullness:A.capacity!=null?String(A.capacity):'', background:optLabel('background',A.background),
     families_per_year:optLabel('families',A.families), package_price:optLabel('price',A.price), lead_sources:optLabel('sources',A.sources),
-    biggest_need:optLabel('want',A.want), start_timeline:optLabel('start',A.start), can_invest_3k:optLabel('invest',A.invest), best_fit_students:A.describe||'', sms_consent:A.consent?'Yes':'No',
+    biggest_need:optLabel('want',A.want), start_timeline:optLabel('start',A.start), can_invest_3k:optLabel('invest',A.invest), about_business:A.describe||'', found_us:A.found==='other'?('Other: '+(A.foundOther||'')):optLabel('found',A.found), sms_consent:A.consent?'Yes':'No',
     utm_source:UTM.utm_source||'', utm_medium:UTM.utm_medium||'', utm_campaign:UTM.utm_campaign||'', utm_content:UTM.utm_content||'', utm_term:UTM.utm_term||'',
     fbclid:UTM.fbclid||'', gclid:UTM.gclid||'', ad_click_id:UTM.fbclid?('fbclid: '+UTM.fbclid):(UTM.gclid?('gclid: '+UTM.gclid):''), landing_page:UTM.landing_page||'', referrer:UTM.referrer||'', first_seen:UTM.first_seen||'',
     lead_type:'Counselor'}; }
