@@ -280,6 +280,7 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .how p{margin:8px 0 0;font-size:15px;line-height:1.5;color:var(--body)}
 @media (max-width:760px){.how{grid-template-columns:1fr;gap:8px;margin-top:18px}.how li{display:grid;grid-template-columns:28px 1fr;column-gap:12px;padding:14px 16px 15px}.how .n{width:28px;height:28px;grid-row:span 2}.how h3{font-size:21px;margin:3px 0 0}.how p{font-size:14.5px;margin-top:4px}}
 .intro .fine{margin-top:16px;font-size:13px;color:var(--body)}
+@media (max-width:560px){.hc-matchlab{font-size:34px}}
 </style>
 </head>
 <body>
@@ -296,10 +297,12 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
     <div class="dots"></div>
     <div class="shade"></div>
     <div class="hero-copy">
-      <h1 class="display"><span class="acc">We find the families</span><br>who fit your practice</h1>
-      <svg class="hchart" id="hchart" viewBox="0 0 960 400" role="img" aria-label="Illustration: your practice and the right family meet, then one purple line climbs through the family brief, your first meeting, a signed family and aftercare, while a red line labeled waiting on referrals levels off.">
+      <h1 class="display"><span class="acc">Scale your practice</span><br>with families who fit</h1>
+      <svg class="hchart" id="hchart" viewBox="0 0 960 400" role="img" aria-label="Illustration of students signed over time: your practice joins 2by2, then one purple line climbs through a steady flow, a full calendar, adding a counselor and scaling up, while a red line labeled referrals only rises and falls with the seasons.">
         <line class="hc-axis" x1="70" y1="24" x2="70" y2="360"/>
         <line class="hc-axis" x1="70" y1="360" x2="930" y2="360"/>
+        <text class="hc-axlab" transform="translate(52 192) rotate(-90)" text-anchor="middle">Students signed</text>
+        <text class="hc-axlab" x="930" y="388" text-anchor="end">Time &rarr;</text>
         <path id="hcGuide" class="hc-guide" d=""/>
         <path id="hcFlat" class="hc-line hc-flat" d=""/>
         <path id="hcStudent" class="hc-line hc-student" d=""/>
@@ -308,14 +311,27 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
         <g id="hcMs" class="hc-ms"></g>
         <g id="hcConf" aria-hidden="true"></g>
         <circle id="hcDot" class="hc-dot" r="0" cx="0" cy="0"/>
-        <text id="hcMatch" class="hc-matchlab display" x="0" y="0" opacity="0">Matched</text>
+        <text id="hcMatch" class="hc-matchlab display" x="0" y="0" opacity="0">Joined 2by2</text>
         <text id="hcLabS" class="hc-lab hc-s" opacity="0">Your practice</text>
-        <text id="hcLabC" class="hc-lab" opacity="0">The right family</text>
-        <text id="hcLabF" class="hc-lab hc-f" opacity="0" text-anchor="end">Waiting on referrals</text>
+        <text id="hcLabC" class="hc-lab" opacity="0">2by2 families</text>
+        <text id="hcLabF" class="hc-lab hc-f" opacity="0" text-anchor="end">Referrals only</text>
       </svg>
     </div>
   </section>
 
+  <div class="intro top-proof">
+    <figure class="note-shot">
+      <div class="ns-wrap">
+        <p class="ns-ann">A family we matched with a counselor in our network</p>
+        <div class="ns-img">
+        <img src="../matchmaking/family-message.png?v=4" width="973" height="159" alt="Message from a parent: Thank you so much for your help to connect us with [counselor name hidden]. I am glad that I found you online. Btw, are you the founder?" loading="lazy">
+        <svg class="ns-arrow ns-arrow-lg" viewBox="0 0 120 70" aria-hidden="true"><path d="M6 64 C 16 26, 52 10, 108 15"/><path d="M96 6 L109 15 L97 25"/></svg>
+        <svg class="ns-arrow ns-arrow-sm" viewBox="0 0 90 60" aria-hidden="true"><path d="M84 6 C 62 8, 30 14, 16 50"/><path d="M8 40 L16 52 L26 42"/></svg>
+        </div>
+      </div>
+      <figcaption>A real message from a parent we matched. Families arrive at your first meeting already sold on the fit.</figcaption>
+    </figure>
+  </div>
   <ol class="how" aria-label="How 2by2 works for counselors">
     <li><span class="n">1</span><h3 class="display">We find the families</h3><p>2by2 runs the ads and the content, and has the first conversation with every family. You don&rsquo;t chase leads.</p></li>
     <li><span class="n">2</span><h3 class="display">We match on fit</h3><p>On a matchmaking call we recommend the counselor who fits the student, and book your first meeting before the family hangs up.</p></li>
@@ -372,14 +388,14 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   var NS='http://www.w3.org/2000/svg',Y0=360,mx=380,my=190;
   var dS='M110 320 C 190 300, 280 250, '+mx+' '+my, dC='M150 120 C 230 150, 300 175, '+mx+' '+my;
   var dR='M'+mx+' '+my+' C '+(mx+170)+' '+(my-15)+', '+(mx+360)+' 98, 900 52';
-  var dF='M110 320 C 210 300, 290 222, 420 204 S 760 198, 900 197';
+  var dF='M110 320 C 210 300, 290 222, 420 210 C 500 202, 520 252, 600 250 C 680 248, 690 202, 760 206 C 830 210, 850 252, 900 248';
   var $=function(id){return document.getElementById(id)};
   var S=$('hcStudent'),C=$('hcCounsel'),R=$('hcRise'),F=$('hcFlat'),guide=$('hcGuide');
   S.setAttribute('d',dS);C.setAttribute('d',dC);R.setAttribute('d',dR);F.setAttribute('d',dF);guide.setAttribute('d','M'+mx+' '+(my+18)+' L '+mx+' '+Y0);
   var L={};[S,C,R,F].forEach(function(p){L[p.id]=p.getTotalLength();p.style.strokeDasharray=L[p.id];});
   var FX=[];for(var k=0;k<=240;k++){var fl=L.hcFlat*k/240;FX.push([fl,F.getPointAtLength(fl).x]);}
   function flatLenAtX(x){if(x<=FX[0][1])return 0;for(var k=1;k<FX.length;k++){if(FX[k][1]>=x){var A=FX[k-1],B=FX[k];return A[0]+(B[0]-A[0])*((x-A[1])/((B[1]-A[1])||1));}}return L.hcFlat;}
-  var ms=[['Family brief',.22],['First meeting',.48],['Signed',.74],['Aftercare',1]].map(function(m){var q=R.getPointAtLength(L.hcRise*m[1]);return [m[0],q.x,q.y,m[1]];});
+  var ms=[['Steady flow',.34],['Full calendar',.56],['Add a counselor',.78],['Scale up',1]].map(function(m){var q=R.getPointAtLength(L.hcRise*m[1]);return [m[0],q.x,q.y,m[1]];});
   var G=$('hcMs');
   ms.forEach(function(m){var g=document.createElementNS(NS,'g');g.setAttribute('opacity','0');g.innerHTML='<circle r="6" cx="'+m[1]+'" cy="'+m[2]+'"/><text x="'+m[1]+'" y="'+(m[2]-16)+'" text-anchor="'+(m[3]===1?'end':'middle')+'">'+m[0]+'</text>';G.appendChild(g);});
   var CF=$('hcConf'),CX=900,CY=52,cps=[],cols=['#8F75EF','#C9B8FF','#FFFFFF','#FF6F7D','#FFD166','#8F75EF','#FFFFFF','#FFD166'];
@@ -392,7 +408,7 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   });
   var dot=$('hcDot'),ml=$('hcMatch'),lS=$('hcLabS'),lC=$('hcLabC'),lF=$('hcLabF');
   dot.setAttribute('cx',mx);dot.setAttribute('cy',my);ml.setAttribute('x',mx);ml.setAttribute('y',my-28);ml.setAttribute('text-anchor','middle');
-  lS.setAttribute('x',112);lS.setAttribute('y',348);lC.setAttribute('x',152);lC.setAttribute('y',104);lF.setAttribute('x',900);lF.setAttribute('y',230);
+  lS.setAttribute('x',112);lS.setAttribute('y',348);lC.setAttribute('x',152);lC.setAttribute('y',104);lF.setAttribute('x',900);lF.setAttribute('y',290);
   var ease=function(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}, cl=function(v){return Math.max(0,Math.min(1,v))};
   function frame(t,raw){
     var p1=ease(cl(t/1600)),p2=ease(cl((t-1700)/2600)),pf=ease(cl(t/4300));
