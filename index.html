@@ -1602,6 +1602,8 @@ footer.ink{margin-top:0!important}
 .tx-go:hover{transform:translateY(-1px);background:#4A35BD}
 .tx-err{margin:0;min-height:0;font-size:13px;color:#B42318}
 .tx-err:empty{display:none}
+.tx-sms{justify-self:stretch;justify-content:center;text-decoration:none;padding:14px 22px;font-size:16px}
+.tx-alt{justify-self:start;background:none;border:0;padding:0;font:500 13px var(--sans);color:#5640CE;text-decoration:underline;cursor:pointer}
 @media (max-width:520px){.tx-row{grid-template-columns:1fr}}
 /* SMS consent */
 .sms-ok{display:flex;gap:10px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:var(--muted,#5C5C66);margin:2px 0 12px;cursor:pointer}
@@ -2097,16 +2099,41 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
 
   // ----- text-me handoff (chat -> SMS via GHL / sheet) -----
   const TX_SHEET='https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec';
-  const TX_GHL='https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/31c821a5-d367-4bc0-8bd3-df5757bdd1dd';   // TODO: GoHighLevel inbound webhook URL
+  const TX_GHL='https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/31c821a5-d367-4bc0-8bd3-df5757bdd1dd';   // GHL inbound webhook (Website: Chat to SMS)
   const txQs=[]; let txLead=null, txEl=null;
   const txSid=(()=>{try{return crypto.randomUUID()}catch(e){return Date.now()+''+Math.random().toString(36).slice(2)}})();
   const txUtm=(()=>{const o=Object.assign({},window.TWOBY2_ATTR||{}),p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(k=>{if(p.get(k))o[k]=p.get(k)});return o})();
   function txSend(stage){
     if(!txLead) return;
-    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat',f:{first_name:txLead.name,phone:'+1'+txLead.phone,sms_consent:txLead.sms?'Yes':'No',chat_questions:txQs.map((q,i)=>(i+1)+'. '+(typeof q==='string'?q:(q&&(q.q||q.text||q.question))||'')).join('\n'),utm_source:txUtm.utm_source||'',utm_medium:txUtm.utm_medium||'',utm_campaign:txUtm.utm_campaign||'',utm_content:txUtm.utm_content||'',utm_term:txUtm.utm_term||'',fbclid:txUtm.fbclid||'',gclid:txUtm.gclid||'',ad_click_id:txUtm.fbclid?('fbclid: '+txUtm.fbclid):(txUtm.gclid?('gclid: '+txUtm.gclid):''),landing_page:txUtm.landing_page||'',referrer:txUtm.referrer||'',first_seen:txUtm.first_seen||''}};
+    const d={type:'chat',stage,sid:txSid,name:txLead.name,phone:txLead.phone,email:txLead.email||'',questions:txQs.slice(),consent:!!txLead.sms,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat',f:{first_name:txLead.name,phone:'+1'+txLead.phone,email:txLead.email||'',sms_consent:txLead.sms?'Yes':'No',chat_questions:txQs.map((q,i)=>(i+1)+'. '+(typeof q==='string'?q:(q&&(q.q||q.text||q.question))||'')).join('\n'),utm_source:txUtm.utm_source||'',utm_medium:txUtm.utm_medium||'',utm_campaign:txUtm.utm_campaign||'',utm_content:txUtm.utm_content||'',utm_term:txUtm.utm_term||'',fbclid:txUtm.fbclid||'',gclid:txUtm.gclid||'',ad_click_id:txUtm.fbclid?('fbclid: '+txUtm.fbclid):(txUtm.gclid?('gclid: '+txUtm.gclid):''),landing_page:txUtm.landing_page||'',referrer:txUtm.referrer||'',first_seen:txUtm.first_seen||''}};
     try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),keepalive:true})}catch(e){}
     if(TX_GHL){try{fetch(TX_GHL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),keepalive:true})}catch(e){}}
   }
+  // ----- mobile: family texts the GHL number directly -----
+  const TX_NUM='+15169792967';   // 2by2 GHL business number
+  const TX_MOBILE=(()=>{try{return /iPhone|iPod|Android.+Mobile/i.test(navigator.userAgent)}catch(e){return false}})();
+  let txSmsEl=null, txFormMode=false;
+  function txQText(q){return typeof q==='string'?q:(q&&(q.q||q.text||q.question))||''}
+  function txSmsHref(){
+    const qs=txQs.map(txQText).filter(Boolean);
+    let body='Hi 2by2! '+(qs.length>1?qs.map((q,i)=>(i+1)+') '+q).join(' '):(qs[0]||''));
+    if(body.length>600) body=body.slice(0,597)+'...';
+    return 'sms:'+TX_NUM+'?&body='+encodeURIComponent(body);
+  }
+  function txSmsCard(){
+    if(txSmsEl){ txSmsEl.querySelector('.tx-sms').href=txSmsHref(); thread.appendChild(txSmsEl); thread.scrollTop=thread.scrollHeight; return; }
+    const el=document.createElement('div'); el.className='tx-card';
+    el.innerHTML='<span class="tx-k">Text a matchmaker</span>'+
+      '<p class="tx-h">Get your answer by text.</p>'+
+      '<p class="tx-p">Tap below and your question is already typed out. Just hit send, and a real 2by2 matchmaker will text you back.</p>'+
+      '<a class="tx-go tx-sms" href="'+txSmsHref()+'">Text my question <span aria-hidden="true">&rsaquo;</span></a>'+
+      '<p class="tx-p" style="font-size:12px;color:#5C5C66">Texting 2by2 Academy at (516) 979-2967. Msg &amp; data rates may apply. Reply STOP to opt out. <a href="privacy.html" target="_blank" rel="noopener" style="color:#5640CE">Privacy</a></p>'+
+      '<button type="button" class="tx-alt">Rather we text you? Leave your number</button>';
+    el.querySelector('.tx-sms').addEventListener('click',()=>{ const sent=txQs.map(txQText).filter(Boolean); try{fetch(TX_SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'chat',stage:'sms-tap',sid:txSid,questions:sent,utm:txUtm,page:location.href,ts:new Date().toISOString(),source:'website chat (mobile text)'}),keepalive:true})}catch(e){}; try{window.tt&&tt('Contact',{content_name:'website chat sms'})}catch(e){}; try{window.fbq&&fbq('track','Contact',{content_name:'website chat sms'})}catch(e){}; track('chat_sms_tap',{questions:sent.length}); });
+    el.querySelector('.tx-alt').addEventListener('click',()=>{ txFormMode=true; el.remove(); txCard(); });
+    txSmsEl=el; thread.appendChild(el); thread.scrollTop=thread.scrollHeight;
+  }
+
   function txCard(){
     if(txEl){ thread.appendChild(txEl); thread.scrollTop=thread.scrollHeight; const f=txEl.querySelector('input'); if(f) f.focus({preventScroll:true}); return; }
     const el=document.createElement('form'); el.className='tx-card'; el.noValidate=true;
@@ -2115,6 +2142,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       '<div class="tx-row"><input class="tx-in" id="txName" autocomplete="given-name" placeholder="First name" aria-label="First name">'+
       '<input class="tx-in" id="txPhone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Mobile number" aria-label="Mobile number">'+
       '<input type="text" name="website" tabindex="-1" autocomplete="off" class="tx-hp" aria-hidden="true"></div>'+
+      '<input class="tx-in" id="txEmail" type="email" inputmode="email" autocomplete="email" placeholder="Email" aria-label="Email">'+
       '<label class="tx-ok"><input type="checkbox" id="txOk"><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, matchmaking call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
       '<button type="submit" class="tx-go">Send <span aria-hidden="true">&rsaquo;</span></button><p class="tx-err" aria-live="polite"></p>';
     el.addEventListener('submit',ev=>{
@@ -2123,10 +2151,12 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       const name=el.querySelector('#txName').value.trim(); let ph=el.querySelector('#txPhone').value.replace(/\D/g,''); if(ph.length===11&&ph[0]==='1') ph=ph.slice(1);
       if(!/^[A-Za-z\u00C0-\u00FF' .-]{2,}$/.test(name)){err.textContent='Add your first name.';return;}
       if(!/^[2-9]\d{2}[2-9]\d{6}$/.test(ph)){err.textContent='Enter a 10-digit US mobile number.';return;}
+      const em=el.querySelector('#txEmail').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)){err.textContent='Enter a valid email.';return;}
       const okSms=el.querySelector('#txOk').checked;
-      txLead={name,phone:ph,sms:okSms}; txSend('new');try{window.tt&&tt('Contact',{content_name:'website chat'})}catch(e){}; track('chat_text_me',{questions:txQs.length});
+      txLead={name,phone:ph,email:em,sms:okSms}; txSend('new');try{window.tt&&tt('Contact',{content_name:'website chat'})}catch(e){}; track('chat_text_me',{questions:txQs.length});
       const nm=name.replace(/[<>&"]/g,'');
-      el.innerHTML=okSms?'<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+nm+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>':'<span class="tx-k">Got it</span><p class="tx-h">Thanks, '+nm+'.</p><p class="tx-p">You didn\u2019t opt in to texts, so a 2by2 matchmaker will call you at \u2022\u2022\u2022 '+ph.slice(-4)+' instead. Keep asking here and we\u2019ll add it to your conversation.</p>';
+      el.innerHTML=okSms?'<span class="tx-k">You\u2019re all set</span><p class="tx-h">Check your phone, '+nm+'.</p><p class="tx-p">A 2by2 matchmaker will text you at \u2022\u2022\u2022 '+ph.slice(-4)+' shortly. Keep asking here and we\u2019ll add it to your conversation.</p>':'<span class="tx-k">Got it</span><p class="tx-h">Thanks, '+nm+'.</p><p class="tx-p">You didn\u2019t opt in to texts, so a 2by2 matchmaker will email you at '+em.replace(/[<>&"]/g,'')+' instead. Keep asking here and we\u2019ll add it to your conversation.</p>';
       thread.scrollTop=thread.scrollHeight;
     });
     txEl=el; thread.appendChild(el); thread.scrollTop=thread.scrollHeight;
@@ -2169,7 +2199,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       }else{
         show(txQs.length>1?"Added. Your matchmaker will cover both when they follow up.":txReply(q));
         await new Promise(r=>{ const w=()=>{ if(typed>=target.length) r(); else setTimeout(w,120); }; w(); });
-        txCard();
+        if(TX_MOBILE&&!txFormMode) txSmsCard(); else txCard();
       }
       track('chat_question_sent_sms',{count:asked});
       return;
