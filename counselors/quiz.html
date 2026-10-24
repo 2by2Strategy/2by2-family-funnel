@@ -336,16 +336,12 @@ function go(n){ hist.push(idx); idx=n; render(true); scrollQuiz(); }
    Edit these rules to change who gets screened out. Each returns a reason code (or '' to keep going). */
 function notAFit(id){
   if(id==='role' && (A.role==='other'||A.role==='school-only')) return 'role';                       // not a counselor yet / school-only
-  if(id==='background' && A.background && A.background.length===1 && A.background[0]==='newer') return 'experience'; // only "Under 5 years"
-  if(id==='capacity' && A.capacity>=10) return 'capacity';                                          // fully booked
   if(id==='start' && A.start==='exploring') return 'timing';                                        // just exploring
   if(id==='invest' && A.invest==='no') return 'invest';                                             // can't invest $3K
   return '';
 }
 var NOT_FIT_LINE = {
   role:'2by2 matches families with independent counselors who take on private clients, so the network isn&rsquo;t set up for you just yet.',
-  experience:'Right now we&rsquo;re adding counselors with more years of experience behind them. Families come to us for that, so we keep the bar high.',
-  capacity:'Sounds like your calendar is full. That&rsquo;s a good problem to have. We match families with counselors who have room to take them on.',
   timing:'We&rsquo;re onboarding counselors who are ready to start working with new families soon, so the timing may not be right yet.',
   invest:'Joining the network takes an upfront investment in your practice, so now may not be the right time.'
 };
