@@ -163,6 +163,8 @@ body>.wrap{width:100%}
 .modal .later:hover{color:var(--p)}
 .fields .opt-l{font-weight:500;color:var(--body)}
 .opts.three .opt{min-height:112px}
+@media (min-width:641px){.opts.three.five{grid-template-columns:repeat(6,minmax(0,1fr))}.opts.three.five .opt{grid-column:span 2}.opts.three.five .opt:nth-child(4){grid-column:2/span 2}}
+@media (max-width:640px){.opts.five .opt:last-child{grid-column:1/-1}}
 body::before{content:"";position:fixed;inset:0;z-index:-10;pointer-events:none;background-image:radial-gradient(900px 600px at 100% 0%,rgba(204,190,245,.8),rgba(204,190,245,0) 70%),radial-gradient(700px 520px at 0% 100%,rgba(204,190,245,.45),rgba(204,190,245,0) 70%)}
 footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 .consent a{color:var(--p);text-decoration:underline}
@@ -243,11 +245,11 @@ var STEPS = [
   {id:'want', type:'multi', title:function(){return 'What would make the biggest difference for '+(isFirm()?'your firm':'your practice')+'?'}, sub:function(){return 'Select all that apply.'},
    opts:[['fit','More families who fit how I work','match'],['steady','A steady flow every month, not just in the fall','calendar'],['time','Less time chasing and qualifying leads','clock'],['briefed','Families who show up already briefed','chat'],['grow','Room to grow beyond referrals','trend']]},
   {id:'describe', type:'text', title:function(){return 'Tell us about '+(isFirm()?'your firm':'your business')},
-   sub:function(){return 'Optional. What you offer, the students you work with best and what makes '+(isFirm()?'your firm':'your practice')+' different.'}},
+   sub:function(){return 'The more detail, the better. It makes our call more efficient. What you offer, the students you work with best, your pricing and what makes '+(isFirm()?'your firm':'your practice')+' different.'}},
   {id:'found', type:'single', other:'other', title:function(){return 'How did you find us?'}, cols:3,
    opts:[['ads','Ads'],['instagram','Instagram'],['facebook','Facebook'],['website','Website'],['referral','Referral'],['other','Other']]},
   {id:'start', type:'single', title:function(){return 'When are you looking to get started?'}, cols:3,
-   opts:[['now','Immediately','bolt'],['2w','In the next 2 weeks','calendar'],['2-4w','2–4 weeks','calendar'],['4-6w','4–6 weeks','calendar'],['6w+','6+ weeks','hourglass'],['exploring','Just exploring for now','eye']]},
+   opts:[['now','Immediately','bolt'],['1w','Within the next week','calendar'],['2-4w','2–4 weeks','calendar'],['nextmonth','Next month','calendar'],['exploring','Just exploring for now','eye']]},
   {id:'invest', type:'single', title:function(){return 'Are you able to invest at least $3,000 into '+(isFirm()?'your firm':'your business')+' to start scaling?'}, cols:3,
    opts:[['yes','Yes, I’m ready to invest','check'],['call','Yes, if it makes sense after the call','help'],['no','Not right now','none']]},
   {id:'contact', type:'contact', title:function(){return 'Let’s book your fit call'},
@@ -274,7 +276,7 @@ function render(focus){
   if(s.sub) h+='<p class="sub">'+s.sub()+'</p>';
   if(s.type==='single'||s.type==='multi'){
     var cur=A[s.id]||(s.type==='multi'?[]:null);
-    h+='<div class="opts'+(s.cols===3?' three':'')+'" role="'+(s.type==='multi'?'group':'radiogroup')+'">';
+    h+='<div class="opts'+(s.cols===3?' three':'')+(s.opts.length===5?' five':'')+'" role="'+(s.type==='multi'?'group':'radiogroup')+'">';
     s.opts.forEach(function(o){
       var on = s.type==='multi'? cur.indexOf(o[0])>-1 : cur===o[0];
       h+='<button type="button" class="opt'+(on?' on':'')+'" data-v="'+o[0]+'" aria-pressed="'+on+'">'+ic(o[2])+'<span>'+o[1]+'</span></button>';
@@ -298,7 +300,7 @@ function render(focus){
   }
   if(s.type==='text'){
     h+='<div class="fields"><textarea class="field" id="tx" placeholder="Type your answer here…">'+esc(A.describe||'')+'</textarea></div>'+
-       '<div class="err" id="err"></div><button class="cta" id="next" type="button">'+(A.describe?'OK':'Skip')+' &rarr;</button>';
+       '<div class="err" id="err"></div><button class="cta" id="next" type="button">Continue &rarr;</button>';
   }
   if(s.type==='contact'){
     h+='<div class="fields">'+
@@ -353,8 +355,8 @@ function bind(s){
   }
   if(s.type==='text'){
     var tx=document.getElementById('tx'), nb=document.getElementById('next');
-    tx.oninput=function(){ nb.innerHTML=(tx.value.trim()?'OK':'Skip')+' &rarr;'; };
-    nb.onclick=function(){ A.describe=tx.value.trim(); next(); };
+    tx.oninput=function(){ err(''); };
+    nb.onclick=function(){ var t=tx.value.trim(); if(!t) return err(isFirm()?'Please tell us about your firm.':'Please tell us about your business.'); A.describe=t; next(); };
   }
   if(s.type==='contact'){
     var cc=document.getElementById('cc'); if(A.cc) cc.value=A.cc;
