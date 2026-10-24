@@ -102,7 +102,7 @@ function chat_(d) {
 
 /* ---------- Counselor questionnaire (tab "Counselor Quiz", page counselors/quiz.html) ---------- */
 var COUNSELOR_HEAD = ['First seen','Last update','Status','Clicked "Choose a time"','Counselor type','First name','Last name','Business name','Email','Phone','Website',
-  'Calendar fullness (1-10)','Background','New families / year','Package price','Where families come from','Biggest need','Best-fit students','Consent',
+  'Calendar fullness (1-10)','Background','New families / year','Package price','Where families come from','Biggest need','Start timeline','Can invest $3K+','Best-fit students','Consent',
   'utm_source','utm_medium','utm_campaign','utm_content','fbclid','gclid','Page','Session'];
 function counselor_(d) {
   var a = d.answers || {}, f = d.f || {}, u = d.utm || {}, sid = clean_(d.sid, 60);
@@ -122,7 +122,7 @@ function counselor_(d) {
     var values = [prev ? prev[0] : new Date(), new Date(), status, d.stage === 'book' ? 'Yes' : (prev ? prev[3] : 'No'),
       clean_(f.counselor_type), clean_(a.firstName, 80), clean_(a.lastName, 80), clean_(a.business, 160), clean_(a.email, 160), clean_((a.cc || '') + ' ' + (a.phone || ''), 40),
       clean_(a.website, 200), clean_(a.capacity, 5), clean_(f.background, 300), clean_(f.families_per_year, 40), clean_(f.package_price, 40),
-      clean_(f.lead_sources, 300), clean_(f.biggest_need, 300), clean_(a.describe, 2000), a.consent ? 'Yes' : (prev ? prev[18] : 'No'),
+      clean_(f.lead_sources, 300), clean_(f.biggest_need, 300), clean_(f.start_timeline, 60), clean_(f.can_invest_3k, 60), clean_(a.describe, 2000), a.consent ? 'Yes' : (prev ? prev[20] : 'No'),
       clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200),
       clean_(d.page, 300), sid];
     if (row) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
