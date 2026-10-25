@@ -201,8 +201,8 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 
 <script>
 /* ---------- SETTINGS: fill these in before launch ---------- */
-var BOOKING_URL = '';            // TODO: 2by2 counselor fit-call calendar link (name/email/phone are appended as URL params). Blank = we follow up by email.
-var WEBHOOK_URL = '';            // TODO: a SEPARATE GoHighLevel inbound webhook for counselors (keep counselors out of the family pipeline)
+var BOOKING_URL = 'https://api.leadconnectorhq.com/widget/bookings/2by2-partner-call';   // 2by2 Partner Call calendar (name/email/phone appended as URL params)
+var WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/YmpirNDYeRVMuv7v24eE/webhook-trigger/6uoFek2g9IDDB2NTG6MX';   // GHL workflow "Website: Counselor Quiz to GHL"
 var SHEET_URL   = 'https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec'; // same 2by2 sheet, tab "Counselor Quiz" (needs the updated Apps Script)
 /* ----------------------------------------------------------- */
 
@@ -267,7 +267,7 @@ var STEPS = [
   {id:'invest', type:'single', title:function(){return 'Are you able to invest at least $3,000 into '+(isFirm()?'your firm':'your business')+' to start scaling?'}, cols:3,
    opts:[['yes','Yes, I’m ready to invest','check'],['call','Yes, if it makes sense after the call','help'],['no','Not right now','none']]},
   {id:'contact', type:'contact', title:function(){return 'Let’s book your fit call'},
-   sub:function(){return 'A free 30-minute call to walk you through how 2by2 matches families to counselors, and whether '+you()+(isFirm()?' fits':' fit')+' the network.'}},
+   sub:function(){return 'A free 20-minute call to walk you through how 2by2 matches families to counselors, and whether '+you()+(isFirm()?' fits':' fit')+' the network.'}},
   {id:'done', type:'done'}
 ];
 
@@ -453,12 +453,12 @@ function renderDone(){
     '</ul>';
   if(BOOKING_URL){
     stage.innerHTML='<div class="step"><h3 class="display">You’re all set, '+esc(A.firstName||'')+'.</h3>'+
-      '<p class="sub">Pick a time for your free 30-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+
+      '<p class="sub">Pick a time for your free 20-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+
       '<a class="cta" id="book" href="'+bookingLink()+'" target="_blank" rel="noopener">Choose a time &rarr;</a>'+list+'</div>';
     document.getElementById('book').onclick=function(){ track('Schedule'); send('book'); };
   } else {
     stage.innerHTML='<div class="step"><h3 class="display">Thanks, '+esc(A.firstName||'')+'. We’ve got it.</h3>'+
-      '<p class="sub">We&rsquo;ll email you within one business day to set up your free 30-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+list+'</div>';
+      '<p class="sub">We&rsquo;ll email you within one business day to set up your free 20-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+list+'</div>';
   }
 }
 
@@ -477,7 +477,14 @@ function flat(){ // readable, flat copy of the answers for GoHighLevel custom fi
     utm_source:UTM.utm_source||'', utm_medium:UTM.utm_medium||'', utm_campaign:UTM.utm_campaign||'', utm_content:UTM.utm_content||'', utm_term:UTM.utm_term||'',
     fbclid:UTM.fbclid||'', gclid:UTM.gclid||'', ad_click_id:UTM.fbclid?('fbclid: '+UTM.fbclid):(UTM.gclid?('gclid: '+UTM.gclid):''), landing_page:UTM.landing_page||'', referrer:UTM.referrer||'', first_seen:UTM.first_seen||'',
     not_a_fit:A.notFit||'', email_list:A.emailList?'Yes':'No',
-    lead_type:'Counselor'}; }
+    lead_type:'Counselor', counselor_application:summary()}; }
+function summary(){ // one readable block for the GHL contact (Counselor Application field)
+  var L=[['Type',roleLabel()],['Business',A.business],['Website',A.website],['Calendar fullness (1-10)',A.capacity!=null?String(A.capacity):''],
+    ['Background',optLabel('background',A.background)],['New families / year',optLabel('families',A.families)],['Package price',optLabel('price',A.price)],
+    ['Families come from',optLabel('sources',A.sources)],['Biggest need',optLabel('want',A.want)],
+    ['Found 2by2 via',A.found==='other'?('Other: '+(A.foundOther||'')):optLabel('found',A.found)],['Start',optLabel('start',A.start)],['Can invest $3K+',optLabel('invest',A.invest)],
+    ['Not a fit',A.notFit||''],['About their business',A.describe]];
+  return L.filter(function(x){return x[1]}).map(function(x){return x[0]+': '+x[1]}).join('\n'); }
 function send(stage){
   var payload={stage:stage, sid:SID, answers:A, f:flat(), utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-counselor-funnel'};
   if(SHEET_URL){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'counselor'},payload)),keepalive:true}); }catch(e){} }
