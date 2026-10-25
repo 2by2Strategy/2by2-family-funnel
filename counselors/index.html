@@ -319,6 +319,190 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
   .cal-count b{font-size:38px}
 }
 @media (prefers-reduced-motion:reduce){.slot .fc{transition:none}.cal-live i{animation:none}}
+
+/* ===== THE MATH (shared) ===== */
+.math{--mbg:#1c1833;--panel:#231E3D;--panel-2:#2c2650;--mline:#3b3466;--fg:#fff;--muted:#b6aedb;--dim:#8a82b6;
+  --brand:#8F75EF;--brand-deep:#5640CE;--you:#2fb37a;--hold:#e8ab3c;--cost:#FF6F7D;--card:#F7F4FE;--card-fg:#16151A;
+  --mdisplay:'Anton','Arial Narrow',Impact,sans-serif;--mbody:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:ui-monospace,'SFMono-Regular',Menlo,monospace;
+  margin:40px 0 0;scroll-margin-top:16px}
+.math .m-head{text-align:center;max-width:760px;margin:0 auto 22px}
+.math .m-kicker{font-size:13px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.math .m-head h2{margin:12px 0 0;font-size:clamp(40px,5vw,68px);line-height:1;color:var(--p)}
+.math .m-head h2 .acc{color:var(--p2)}
+.math .m-head p{margin:14px auto 0;color:#5C5C66;font-size:16.5px;line-height:1.6;max-width:560px}
+.math .m-foot{font-size:12px;color:#5C5C66;margin-top:10px;text-align:center}
+.math .money{font-variant-numeric:tabular-nums}
+.math .m-dark{background:var(--panel);color:var(--fg);border-radius:18px;overflow:hidden;font-family:var(--mbody);border:1px solid #2f2856;box-shadow:0 30px 60px -30px rgba(35,30,61,.55)}
+.math .kick{font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.math .copy{padding:40px 40px 32px;display:flex;flex-direction:column;justify-content:center;gap:12px;min-width:0}
+.math .copy h3{font-family:var(--mdisplay);font-weight:400;font-size:clamp(28px,3.2vw,40px);line-height:1;margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.01em}
+.math .copy p{margin:0;color:#d6d0ef;max-width:46ch;font-size:15px;line-height:1.55}
+.math .checks{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.math .checks li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#e6e1f8}
+.math .checks li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;
+  background:rgba(47,179,122,.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.2 2.2 4.8-4.8' fill='none' stroke='%232fb37a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.math .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.math .btn{font:600 14px/1 var(--mbody);color:var(--fg);background:transparent;border:1px solid var(--mline);border-radius:999px;padding:11px 16px;cursor:pointer}
+.math .btn:hover{border-color:var(--dim)}
+.math .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.math .btn.primary:hover{filter:brightness(1.06)}
+.math button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.math a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.math .copy.swap{animation:mCopyIn .45s ease both}
+@keyframes mCopyIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* scene visuals */
+.math .stage{position:relative;overflow:hidden;background:radial-gradient(70% 80% at 45% 55%,rgba(86,64,206,.45),transparent 70%),var(--mbg)}
+.math .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
+.math .scene.on{opacity:1;visibility:visible;transition:opacity .35s ease}
+.math .scene.on .in{animation:mRise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+@keyframes mRise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.math .node{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font:600 12px/1 var(--mbody);flex:none;position:relative;z-index:1}
+.math .node.famn{background:#2f2950;border:1px solid #4a4280;color:#e1dcf5}
+.math .node.brand{background:var(--brand-deep);border:1px solid var(--brand);color:#fff;box-shadow:0 0 40px rgba(143,117,239,.5)}
+.math .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 11px;font:600 12px/1 var(--mbody);white-space:nowrap}
+.math .chip.light{background:var(--card);color:var(--card-fg)}
+.math .chip.brand{background:var(--brand);color:#fff}
+.math .chip.you{background:var(--you);color:#06281a}
+.math .chip.hold{background:var(--hold);color:#2c1d02}
+.math .chip.ghost{background:#2f2950;color:#e1dcf5;border:1px solid #4a4280}
+.math .sw{width:9px;height:9px;border-radius:50%;flex:none}
+.math .m-intro{display:flex;flex-direction:column;align-items:center;gap:18px}
+.math .m-intro .big{font-family:var(--mdisplay);font-size:clamp(56px,8vw,88px);line-height:1;letter-spacing:.01em}
+.math .m-intro .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.math .flow{display:flex;align-items:center;width:100%;max-width:380px}
+.math .track{flex:1;height:2px;background:linear-gradient(90deg,#4a4280,var(--brand));position:relative}
+.math .track .chip{position:absolute;top:50%;left:0;transform:translate(-10%,-50%)}
+.math .scene.on .track .chip{animation:mTravel 1.6s cubic-bezier(.5,0,.3,1) .5s both}
+@keyframes mTravel{from{left:0;opacity:0}15%{opacity:1}to{left:100%;transform:translate(-90%,-50%)}}
+.math .ticket{margin-top:34px;background:var(--card);color:var(--card-fg);border-radius:12px;padding:12px 16px;min-width:220px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.math .ticket .k{font:500 10px/1 var(--mono);letter-spacing:.12em;color:#7a7590;text-transform:uppercase}
+.math .ticket .v{font:600 22px/1.2 var(--mbody);margin-top:6px}
+.math .ticket .s{font-size:12px;color:#6c6780}
+.math .scene.on .ticket{animation:mRise .6s cubic-bezier(.2,.7,.2,1) 1.9s both}
+.math .split{width:100%;max-width:440px;display:flex;flex-direction:column;gap:18px}
+.math .bar{display:flex;height:46px;border-radius:10px;overflow:hidden;background:#2a2450;gap:2px}
+.math .seg{height:100%;width:var(--w);display:flex;align-items:center;padding-left:10px;font:600 13px/1 var(--mbody);white-space:nowrap;overflow:hidden}
+.math .scene.on .seg{animation:mGrow .8s cubic-bezier(.3,.7,.2,1) both;animation-delay:var(--d,0s)}
+@keyframes mGrow{from{width:0}to{width:var(--w)}}
+.math .seg.you{background:var(--you);color:#06281a}
+.math .seg.you2{background:#23855c;color:#dff7ec}
+.math .seg.co{background:var(--brand);color:#fff}
+.math .seg.hold{background:var(--hold);color:#2c1d02}
+.math .seg.later{background:repeating-linear-gradient(135deg,#23855c 0 6px,#1e7550 6px 12px)}
+.math .legend{display:flex;flex-direction:column;gap:8px}
+.math .lg{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;font-size:14px;padding:8px 0;border-bottom:1px solid var(--mline)}
+.math .lg:last-child{border-bottom:0}
+.math .lg .pct{color:var(--muted);font:500 12px/1 var(--mono)}
+.math .lg .amt{font-weight:600;min-width:72px;text-align:right}
+.math .tl{width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px}
+.math .stat86{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.math .stat86 b{font-family:var(--mdisplay);font-weight:400;font-size:clamp(44px,6vw,58px);line-height:1;color:var(--you)}
+.math .stat86 span{font-size:14px;color:#e6e1f8;max-width:22ch}
+.math .m-opt{display:flex;flex-direction:column;gap:7px;background:var(--panel-2);border:1px solid var(--mline);border-radius:12px;padding:11px 12px}
+.math .optk{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px}
+.math .optk span{color:var(--muted)}
+.math .bar.sm{height:30px;border-radius:7px}
+.math .bar.sm .seg{font-size:12px;padding-left:8px}
+.math .vault{display:flex;flex-direction:column;align-items:center;gap:16px}
+.math .safe{width:230px;border-radius:14px;padding:18px;background:#2a2213;border:1px solid #6a5424;display:flex;flex-direction:column;gap:6px;position:relative}
+.math .safe .k{font:500 10px/1 var(--mono);letter-spacing:.12em;color:var(--hold);text-transform:uppercase}
+.math .safe .v{font:600 30px/1.1 var(--mbody)}
+.math .safe .s{font-size:12px;color:var(--muted)}
+.math .lock{position:absolute;right:16px;top:16px;width:22px;height:22px}
+.math .scene.on .safe{animation:mUnlock .6s ease 2.4s both}
+@keyframes mUnlock{to{background:#113026;border-color:var(--you)}}
+.math .scene.on .safe .k{animation:mToGreen .6s ease 2.4s both}
+@keyframes mToGreen{to{color:var(--you)}}
+.math .scene.on .lock .shackle{animation:mOpen .5s ease 2.3s both}
+@keyframes mOpen{to{transform:translateY(-3px) rotate(-18deg);transform-origin:16px 10px}}
+.math .released{opacity:0}
+.math .scene.on .released{animation:mRise .5s ease 2.7s both}
+.math .inv{width:100%;max-width:320px;background:var(--card);color:var(--card-fg);border-radius:14px;padding:18px 18px 16px;box-shadow:0 20px 50px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:10px}
+.math .inv .k{font:500 10px/1 var(--mono);letter-spacing:.12em;color:#7a7590;text-transform:uppercase}
+.math .inv .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.math .inv .ln.sub{color:#6c6780;font-size:13px;border-top:1px dashed #cfcadb;padding-top:10px}
+.math .inv .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #d9d5e3;padding-top:10px}
+.math .inv .tot b{font:600 26px/1 var(--mbody)}
+.math .inv .tot span{font-size:12px;color:#6c6780}
+.math .closes{width:100%;max-width:440px;display:flex;flex-direction:column;gap:16px}
+.math .fams{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.math .m-fam{background:var(--card);color:var(--card-fg);border-radius:12px;padding:10px 14px;min-width:120px}
+.math .m-fam .k{font:500 10px/1 var(--mono);letter-spacing:.1em;color:#7a7590;text-transform:uppercase}
+.math .m-fam .v{font:600 18px/1.3 var(--mbody)}
+.math .eq{font:600 18px/1 var(--mbody);color:var(--muted)}
+.math .sum{font-family:var(--mdisplay);font-size:34px;line-height:1}
+.math .wf{width:100%;max-width:470px;display:flex;flex-direction:column;gap:7px}
+.math .wr{display:grid;grid-template-columns:118px 1fr 74px;gap:10px;align-items:center;font-size:12.5px}
+.math .wr .nm{color:var(--muted)}
+.math .wr .tr{position:relative;height:22px}
+.math .wnote{font-size:11.5px;color:var(--dim);margin:-3px 0 4px 128px}
+.math .wr .tr i{position:absolute;top:0;bottom:0;left:var(--l);width:var(--w);border-radius:5px}
+.math .scene.on .wr .tr i{animation:mGrow .7s cubic-bezier(.3,.7,.2,1) both;animation-delay:var(--d,0s)}
+.math .wr .v{text-align:right;font-weight:600}
+.math .wr.total .nm{color:var(--fg);font-weight:600}
+.math .wr.total .v{color:var(--you)}
+.math .roi{margin-top:12px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:1px solid var(--mline);padding-top:12px}
+.math .roi b{font-family:var(--mdisplay);font-weight:400;font-size:clamp(44px,6vw,60px);line-height:1;color:var(--you)}
+.math .roi span{font-size:13px;color:var(--muted);max-width:22ch}
+.math .team{display:flex;flex-direction:column;align-items:center;gap:16px}
+.math .seats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.math .seat{background:var(--panel-2);border:1px solid var(--mline);border-radius:12px;padding:12px 14px;min-width:150px;display:flex;flex-direction:column;gap:4px}
+.math .seat .k{font:500 10px/1 var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.math .seat .v{font:600 18px/1.2 var(--mbody)}
+.math .teamtot{font-family:var(--mdisplay);font-size:clamp(38px,5vw,50px);line-height:1}
+.math .teamtot small{font-family:var(--mbody);font-size:14px;color:var(--muted);margin-left:6px}
+.math .ladder{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
+.math .rung{display:grid;grid-template-columns:96px 1fr 70px;gap:12px;align-items:center;font-size:13px}
+.math .rk{color:var(--muted)}
+.math .rung b{text-align:right;font-weight:600}
+.math .rb{position:relative;height:30px;background:#2a2450;border-radius:7px;overflow:hidden}
+.math .rb i{position:absolute;inset:0 auto 0 0;width:var(--w);border-radius:7px;background:linear-gradient(90deg,var(--brand-deep),var(--brand))}
+.math .scene.on .rb i{animation:mGrow .8s cubic-bezier(.3,.7,.2,1) both;animation-delay:var(--d,0s)}
+.math .perseat{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--mline);padding-top:14px}
+.math .save{font-size:13px;color:var(--muted)}
+.math .sumcard{width:100%;max-width:420px;background:var(--panel-2);border:1px solid var(--mline);border-radius:14px;padding:16px 18px}
+.math .sumcard .k{font:500 10px/1 var(--mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.math .srow{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--mline);font-size:14px}
+.math .srow:last-child{border-bottom:0}
+.math .srow span{color:var(--muted)}
+.math .srow b{font-weight:600}
+.math .srow.hl b{color:var(--you);font-size:16px}
+@media (max-width:440px){.math .wr{grid-template-columns:92px 1fr 64px;font-size:11.5px}.math .wnote{margin-left:102px}.math .scene{padding:18px}}
+@media (prefers-reduced-motion:reduce){
+  .math .scene.on *,.math .scene.on .seg,.math .scene.on .wr .tr i{animation:none!important}
+  .math .released{opacity:1}
+  .math .scene.on .safe{background:#113026;border-color:var(--you)}
+  .math .scene.on .track .chip{left:100%;transform:translate(-90%,-50%)}
+  .math .copy.swap{animation:none}
+}
+
+/* option C: calculator */
+.math .calc{display:grid;grid-template-columns:1fr 1.15fr}
+.math .ctrls{padding:30px 30px 28px;display:flex;flex-direction:column;gap:24px;border-right:1px solid var(--mline)}
+.math .ctrl label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px;color:var(--muted)}
+.math .ctrl label b{font-family:var(--mdisplay);font-weight:400;font-size:30px;line-height:1;color:var(--fg)}
+.math input[type=range]{width:100%;margin:12px 0 0;-webkit-appearance:none;appearance:none;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--brand) var(--fill,50%),#3b3466 var(--fill,50%));outline:none}
+.math input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--brand);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.math input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--brand);cursor:pointer}
+.math input[type=range]:focus-visible{outline:2px solid var(--brand);outline-offset:6px}
+.math .ctrl .ticks{display:flex;justify-content:space-between;font:500 11px/1 var(--mono);color:var(--dim);margin-top:8px}
+.math .presets{display:flex;gap:8px;flex-wrap:wrap}
+.math .presets .btn{padding:9px 13px;font-size:13px}
+.math .presets .btn.on{background:var(--panel-2);border-color:var(--brand);color:#fff}
+.math .out{padding:30px 30px 24px;background:radial-gradient(70% 80% at 60% 40%,rgba(86,64,206,.4),transparent 70%),var(--mbg);display:flex;flex-direction:column;gap:6px}
+.math .hero-num{font-family:var(--mdisplay);font-weight:400;font-size:clamp(52px,7vw,76px);line-height:1;color:var(--you);font-variant-numeric:tabular-nums}
+.math .hero-cap{font-size:14px;color:var(--muted)}
+.math .yr{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;align-items:end;height:150px;margin-top:20px}
+.math .yr i{display:block;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--brand),var(--brand-deep));height:var(--h);transition:height .5s cubic-bezier(.3,.7,.2,1)}
+.math .yr i:last-child{background:linear-gradient(180deg,#5fd6a2,var(--you))}
+.math .yrlab{display:flex;justify-content:space-between;font:500 11px/1 var(--mono);color:var(--dim);margin-top:6px}
+.math .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.math .stat{background:var(--panel-2);border:1px solid var(--mline);border-radius:12px;padding:12px 14px}
+.math .stat .k{font-size:12.5px;color:var(--muted)}
+.math .stat b{display:block;font:600 22px/1.25 var(--mbody);margin-top:3px;font-variant-numeric:tabular-nums}
+.math .out .note{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.5}
+@media (max-width:820px){.math .calc{grid-template-columns:1fr}.math .ctrls{border-right:0;border-bottom:1px solid var(--mline);padding:22px 20px}.math .out{padding:22px 18px}.math .yr{height:120px;gap:4px}}
 </style>
 </head>
 <body>
@@ -364,6 +548,36 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
     <li><span class="n">2</span><h3 class="display">We match on fit</h3><p>On a matchmaking call we recommend the counselor who fits the student, and book your first meeting before the family hangs up.</p></li>
     <li><span class="n">3</span><h3 class="display">We stay beside you both</h3><p>You get a full brief before you meet, a shared group chat with the family, and 2by2 in the room through signing and after.</p></li>
   </ol>
+  <section class="math" id="math" aria-label="What 2by2 families could pay you">
+  <div class="m-head">
+    <div class="m-kicker">For 2by2 counselors</div>
+    <h2 class="display">The <span class="acc">math</span></h2>
+    <p>Move the sliders. See what families from 2by2 could pay your practice.</p>
+  </div>
+    <div class="m-dark calc">
+      <div class="ctrls">
+        <div class="ctrl"><label for="cFam">Families you sign a month <b id="cFamV">2</b></label>
+          <input type="range" id="cFam" min="1" max="15" step="1" value="2"><div class="ticks"><span>1</span><span>15</span></div></div>
+        <div class="ctrl"><label for="cPrice">Average program price <b id="cPriceV">$15,000</b></label>
+          <input type="range" id="cPrice" min="5000" max="35000" step="1000" value="15000"><div class="ticks"><span>$5K</span><span>$35K</span></div></div>
+        <div class="ctrl"><div class="kick" style="margin-bottom:10px">Try a month</div>
+          <div class="presets"><button class="btn on" type="button" data-p="2,15000">Example: 2 &times; $15K</button><button class="btn" type="button" data-p="5,15000">Busy season</button><button class="btn" type="button" data-p="3,30000">Premium programs</button></div></div>
+      </div>
+      <div class="out" aria-live="polite">
+        <div class="kick" id="cHead">2 families &times; $15,000</div>
+        <div class="hero-num" id="vMonth">$24,000</div>
+        <div class="hero-cap">paid to you from 2by2 families this month</div>
+        <div class="yr" id="cYr" aria-hidden="true"></div>
+        <div class="yrlab"><span>Month 1</span><span>Month 12</span></div>
+        <div class="stats">
+          <div class="stat"><span class="k">Over a year</span><b id="vYear">$288,000</b></div>
+          <div class="stat"><span class="k">Students added a year</span><b id="vStu">24</b></div>
+        </div>
+        <div class="note">A rough picture, not a promise. On your fit call, we&rsquo;ll map out the real numbers for your practice.</div>
+      </div>
+    </div>
+  <div class="m-foot">Example only. Your results depend on the families you sign.</div>
+  </section>
   <div class="go">
     <h2>Answer 13 quick questions to see if your practice fits</h2>
     <a href="#intro" aria-label="Continue">&darr;</a>
@@ -414,7 +628,8 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   var cal=document.getElementById('cal'); if(!cal) return;
   // [day, time slot, first meeting label, student, focus, signed?]  (illustrative families, no real people)
   var FAM=[[1,2,'Intro','Junior','Top-20 goals',0],[0,0,'Intro','Senior','Arts portfolio',1],[2,1,'Intro','Sophomore','Early planning',0],
-           [3,0,'Intro','Junior','First-gen family',1],[4,2,'Intro','Transfer','UC pathway',0]];
+           [3,0,'Intro','Junior','First-gen family',1],[0,2,'Intro','Junior','STEM research',0],[4,2,'Intro','Transfer','UC pathway',0],
+           [2,0,'Intro','Senior','Early decision',1],[3,2,'Intro','Junior','Ivy list',0]];
   var slots={}; [].forEach.call(cal.querySelectorAll('.slot'),function(s){ slots[s.dataset.d+'-'+s.dataset.t]=s; });
   var N=document.getElementById('calN'), toast=document.getElementById('calToast'), toastT=document.getElementById('calToastT');
   var mobile=function(){ return window.matchMedia('(max-width:760px)').matches; };
@@ -430,12 +645,37 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   function order(){ return FAM.map(function(f,i){return i}).filter(function(i){ return !mobile() || FAM[i][0]<3; }); }
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduce){ order().forEach(show); toast.classList.remove('on'); return; }
-  function run(){ reset(); var o=order(), step=1100;
+  function run(){ reset(); var o=order(), step=950;
     o.forEach(function(i,k){ timers.push(setTimeout(function(){ show(i); }, 500+k*step)); });
     timers.push(setTimeout(run, 500+o.length*step+3600)); }
   // only animate while the hero is on screen
   var started=false;
   if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ if(es[0].isIntersecting && !started){ started=true; run(); } },{threshold:.12}).observe(cal); } else run();
+})();
+
+/* The Math: calculator (payout only) */
+(function(){
+  var root=document.getElementById('math'); if(!root) return;
+  var SHARE=0.8;
+  var $=function(id){return document.getElementById(id)}, fam=$('cFam'), price=$('cPrice'), yr=$('cYr');
+  var money=function(n){ return '$'+Math.round(n).toLocaleString('en-US'); };
+  for(var k=1;k<=12;k++){ var b=document.createElement('i'); b.style.setProperty('--h',(k/12*100)+'%'); yr.appendChild(b); }
+  var shown={};
+  function animate(id,to,fmt){ var el=$(id), from=shown[id]==null?to:shown[id]; shown[id]=to; var st=performance.now(), dur=450;
+    (function t(now){ var p=Math.min(1,(now-st)/dur), e=1-Math.pow(1-p,3); el.textContent=fmt(from+(to-from)*e); if(p<1) requestAnimationFrame(t); })(st); }
+  function fill(r){ r.style.setProperty('--fill',((r.value-r.min)/(r.max-r.min)*100)+'%'); }
+  function calc(){
+    var f=+fam.value, p=+price.value, month=f*p*SHARE;
+    $('cFamV').textContent=f; $('cPriceV').textContent=money(p);
+    $('cHead').textContent=f+(f===1?' family':' families')+' × '+money(p);
+    animate('vMonth',month,money); animate('vYear',month*12,money); animate('vStu',f*12,function(n){return Math.round(n).toLocaleString('en-US')});
+    [fam,price].forEach(fill);
+  }
+  [fam,price].forEach(function(r){ r.addEventListener('input',function(){ root.querySelectorAll('.presets .btn').forEach(function(b){b.classList.remove('on')}); calc(); }); });
+  root.querySelectorAll('.presets .btn').forEach(function(b){ b.onclick=function(){ var v=b.dataset.p.split(','); fam.value=v[0]; price.value=v[1];
+    root.querySelectorAll('.presets .btn').forEach(function(x){x.classList.toggle('on',x===b)}); calc(); }; });
+  var once=false; root.addEventListener('input',function(){ if(once) return; once=true; try{ if(window.tt) tt('CounselorCalculatorUsed'); }catch(e){} });
+  calc();
 })();
 </script>
 </body>
