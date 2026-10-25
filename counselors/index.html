@@ -340,7 +340,7 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
       <div class="cal" id="cal" role="img" aria-label="Illustration: a counselor&rsquo;s weekly calendar filling up with families matched by 2by2, some marked signed.">
         <div class="cal-top"><span class="cal-t">Your week</span><span class="cal-live"><i></i>New families from 2by2</span></div>
         <div class="cal-grid"><div class="cal-day"><div class="cal-d">Mon</div><div class="slot" data-d="0" data-t="0"></div><div class="slot" data-d="0" data-t="1"></div><div class="slot" data-d="0" data-t="2"></div></div><div class="cal-day"><div class="cal-d">Tue</div><div class="slot" data-d="1" data-t="0"></div><div class="slot" data-d="1" data-t="1"></div><div class="slot" data-d="1" data-t="2"></div></div><div class="cal-day"><div class="cal-d">Wed</div><div class="slot" data-d="2" data-t="0"></div><div class="slot" data-d="2" data-t="1"></div><div class="slot" data-d="2" data-t="2"></div></div><div class="cal-day"><div class="cal-d">Thu</div><div class="slot" data-d="3" data-t="0"></div><div class="slot" data-d="3" data-t="1"></div><div class="slot" data-d="3" data-t="2"></div></div><div class="cal-day"><div class="cal-d">Fri</div><div class="slot" data-d="4" data-t="0"></div><div class="slot" data-d="4" data-t="1"></div><div class="slot" data-d="4" data-t="2"></div></div></div>
-        <div class="cal-foot"><div class="cal-count"><b id="calN">0</b><span>families matched to you this season</span></div><div class="cal-toast" id="calToast">&#10003; <span id="calToastT">New family signed</span></div></div>
+        <div class="cal-foot"><div class="cal-count"><b id="calN">0</b><span>new families matched to you this week</span></div><div class="cal-toast" id="calToast">&#10003; <span id="calToastT">New family signed</span></div></div>
         <div class="cal-note">Illustration</div>
       </div>
     </div>
@@ -413,11 +413,8 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
 (function(){
   var cal=document.getElementById('cal'); if(!cal) return;
   // [day, time slot, first meeting label, student, focus, signed?]  (illustrative families, no real people)
-  var FAM=[[0,0,'Intro','Junior','Top-20 goals',0],[1,1,'Intro','Senior','Arts portfolio',1],[2,0,'Intro','Sophomore','Early planning',0],
-           [0,2,'Intro','Junior','First-gen family',1],[3,1,'Intro','Senior','Recruited athlete',0],[1,0,'Intro','Junior','STEM research',1],
-           [2,2,'Intro','Transfer','UC pathway',0],[4,0,'Intro','Junior','Ivy list',1],[3,2,'Intro','Senior','Early decision',0],
-           [4,2,'Intro','Junior','Merit aid focus',1],[0,1,'Intro','Sophomore','Summer programs',0],[2,1,'Intro','Senior','Essays',1],
-           [1,2,'Intro','Junior','Test strategy',0],[3,0,'Intro','Senior','Waitlist plan',1],[4,1,'Intro','Junior','Engineering',0]];
+  var FAM=[[1,2,'Intro','Junior','Top-20 goals',0],[0,0,'Intro','Senior','Arts portfolio',1],[2,1,'Intro','Sophomore','Early planning',0],
+           [3,0,'Intro','Junior','First-gen family',1],[4,2,'Intro','Transfer','UC pathway',0]];
   var slots={}; [].forEach.call(cal.querySelectorAll('.slot'),function(s){ slots[s.dataset.d+'-'+s.dataset.t]=s; });
   var N=document.getElementById('calN'), toast=document.getElementById('calToast'), toastT=document.getElementById('calToastT');
   var mobile=function(){ return window.matchMedia('(max-width:760px)').matches; };
@@ -433,9 +430,8 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
   function order(){ return FAM.map(function(f,i){return i}).filter(function(i){ return !mobile() || FAM[i][0]<3; }); }
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduce){ order().forEach(show); toast.classList.remove('on'); return; }
-  function run(){ reset(); var o=order(), step=620;
+  function run(){ reset(); var o=order(), step=1100;
     o.forEach(function(i,k){ timers.push(setTimeout(function(){ show(i); }, 500+k*step)); });
-    timers.push(setTimeout(function(){ clearTimeout(hideT); toastT.textContent='Week fully booked'; toast.classList.add('on'); }, 500+o.length*step+300));
     timers.push(setTimeout(run, 500+o.length*step+3600)); }
   // only animate while the hero is on screen
   var started=false;
