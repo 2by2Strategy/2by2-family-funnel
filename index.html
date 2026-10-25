@@ -1032,7 +1032,7 @@ footer.ink{margin-top:0!important}
 .hero h1 .l1,.hero h1 .l2{display:block!important;white-space:nowrap!important}
 .guides{display:none!important}
 .hero h1 .ast{font-size:.5em;vertical-align:.7em;line-height:0;margin-left:.04em;color:#9474F7}
-@media (max-width:640px){.hero h1 .ast{font-size:.28em;vertical-align:1.55em;margin-left:.06em}}
+@media (max-width:640px){.hero h1 .ast{font-size:.3em;vertical-align:1.45em;margin-left:.06em}}
 .ast-n{color:#9474F7;font-weight:700;margin-right:2px}
 .hero{padding-top:80px!important}
 @media (max-width:640px){.hero{padding-top:72px!important}}
@@ -2704,15 +2704,23 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   (function(){
     const h=document.querySelector('.hero h1'); if(!h) return;
     const ls=[...h.querySelectorAll('.l1,.l2')];
+    // phones only: break the title into four lines (desktop markup stays untouched)
+    const brk=[[ls[0],'behind your'],[ls[1],'success story.']];
+    function setBreaks(on){
+      h.querySelectorAll('br.mbr').forEach(b=>b.remove());
+      if(!on) { h.normalize(); return; }
+      brk.forEach(([l,txt])=>{ if(!l) return; const t=[...l.childNodes].find(n=>n.nodeType===3&&n.nodeValue.includes(txt)); if(!t) return;
+        const i=t.nodeValue.indexOf(txt), rest=t.splitText(i); const b=document.createElement('br'); b.className='mbr'; l.insertBefore(b,rest); });
+    }
     function fit(){
-      ls.forEach(l=>l.style.fontSize='');
+      const phone=matchMedia('(max-width:640px)').matches;
+      setBreaks(phone);
       h.style.fontSize='100px';
       const avail=h.parentElement.clientWidth;
-      const w=Math.max(...ls.map(l=>{l.style.display='inline-block';const x=l.scrollWidth;l.style.display='';return x;}));
-      const ws=ls.map(l=>{const g=document.createRange();g.selectNodeContents(l);return g.getBoundingClientRect().width;});
-      h.style.setProperty('font-size',Math.min(104,Math.floor(100*avail/w*0.98))+'px','important');
-      // phones: blow the first line up so it spans the same width as the second
-      if(matchMedia('(max-width:640px)').matches&&ls.length===2&&ws[0]<ws[1]) ls[0].style.fontSize=Math.min(1.5,ws[1]/ws[0]*0.99).toFixed(3)+'em';
+      // phones: measure the widest actual line of text (title wraps to four lines there)
+      const w=phone?Math.max(...ls.map(l=>{const g=document.createRange();g.selectNodeContents(l);return Math.max(...[...g.getClientRects()].map(r=>r.width));}))
+                   :Math.max(...ls.map(l=>{l.style.display='inline-block';const x=l.scrollWidth;l.style.display='';return x;}));
+      h.style.setProperty('font-size',Math.min(phone?72:104,Math.floor(100*avail/w*0.98))+'px','important');
     }
     fit(); addEventListener('resize',fit); if(document.fonts) document.fonts.ready.then(fit);
   })();
