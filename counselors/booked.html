@@ -579,20 +579,6 @@ footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
     </div>
   </section>
 
-  <div class="go">
-    <h2>Here&rsquo;s what we&rsquo;ll walk through on the call</h2>
-    <a href="#intro" aria-label="Continue">&darr;</a>
-    <div class="gobar"><span></span></div>
-  </div>
-
-  <section class="intro" id="intro">
-    <div class="kicker">Now accepting counselors in: &#127482;&#127480;</div>
-    <h2 class="display">Let&rsquo;s grow <span class="acc">your practice</span></h2>
-    <p>On our 20-minute call, tell us who you are, who you serve best and how families find you today. We&rsquo;ll show you exactly how we&rsquo;ll grow your practice. You keep your practice and your name. We bring the students.</p>
-    <a class="cta" id="start" href="#vsl">&#9654; Rewatch the video</a>
-    <p class="fine">110+ counselors have applied. A select few made it in.</p>
-  </section>
-
   <div class="intro top-proof">
     <figure class="note-shot">
       <div class="ns-wrap">
@@ -668,7 +654,6 @@ function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp
   if(false){ var pr=document.getElementById('proof'), fm=pr.querySelector('.fam'), sp=pr.querySelector('.sep'); if(fm) fm.remove(); if(sp) sp.remove(); }
   if(HERO_IMAGE){ document.getElementById('heroImg').style.backgroundImage='url("'+HERO_IMAGE+'")'; document.getElementById('hero').classList.add('has-img'); }
 })();
-document.getElementById('start').addEventListener('click',function(){ try{ if(window.tt) tt('CounselorVSLRewatch'); }catch(e){} });
 
 /* booked: count the booking once per browser (Meta standard event "Schedule") */
 (function(){
@@ -694,10 +679,6 @@ document.getElementById('start').addEventListener('click',function(){ try{ if(wi
     [25,50,75,95].forEach(function(m){ if(pct>=m && !hit[m]){ hit[m]=1; ev('CounselorVSLProgress',{percent:m}); } });
   });
   v.addEventListener('ended',function(){ ev('CounselorVSLComplete'); });
-  document.getElementById('start').addEventListener('click',function(e){
-    e.preventDefault(); document.getElementById('vsl').scrollIntoView({behavior:'smooth'});
-    setTimeout(function(){ v.currentTime=0; b.click(); },500);
-  });
 })();
 
 /* counselor hero: the calendar fills with matched families, then loops */
