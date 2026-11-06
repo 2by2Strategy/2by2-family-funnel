@@ -2872,6 +2872,8 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
   const dotsByState={};
   MAP_DOTS.split(';').forEach(t=>{const [x,y,s]=t.split(',');const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',4.2);svg.appendChild(c);const code=MAP_CODES[+s];(dotsByState[code]=dotsByState[code]||[]).push(c);});
   let ping=null, youState=null, counts={};
+  // Families helped under Gallatin Strategy Group before the 2by2 rebrand. Update if the number changes.
+  const LEGACY_FAMILIES=236;
   // Projected HS graduates, class of 2025 (WICHE Knocking at the College Door, Dec 2024)
   const GRADS={AK:8722,AZ:85639,CA:469214,CO:65716,HI:14276,ID:23623,MT:10374,NV:35304,NM:22472,ND:8642,OR:42752,SD:10344,UT:50172,WA:83021,WY:6385,AL:55021,AR:36169,DE:11939,DC:6652,FL:234996,GA:134031,KY:51027,LA:53263,MD:74018,MS:33606,NC:121741,OK:50332,SC:57865,TN:75761,TX:408251,VA:104008,WV:18113,IL:144561,IN:78138,IA:39747,KS:38361,MI:104326,MN:67216,MO:68656,NE:23862,OH:143303,WI:68507,CT:45634,ME:14056,MA:76935,NH:16484,NJ:111084,NY:206184,PA:137304,RI:11551,VT:5807};
   const fmt=n=>n.toLocaleString('en-US');
@@ -2884,9 +2886,12 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
       const fill=code===youState?'#C7B0F8':(counts[code]?'#5A3FD6':shade(code));
       list.forEach(c=>{c.style.fill=fill;c.dataset.s=code;});
     });
-    const total=Object.values(counts).reduce((a,b)=>a+b,0), states=Object.keys(counts).length;
-    document.getElementById('famCount').textContent=total; {const fs=document.querySelector('.mstat.fam'); if(fs) fs.style.display=total?'':'none';} if(typeof drawFamPings==='function') drawFamPings();
-    document.getElementById('famLbl').textContent=(total===1?'2by2 family':'2by2 families')+(states?' in '+states+(states===1?' state':' states'):'');
+    const total=Object.values(counts).reduce((a,b)=>a+b,0);
+    // Headline = families helped under GSG (before the 2by2 rebrand) + live 2by2 map signups.
+    // Per-state tooltips/cards below still show only the live 2by2 signups.
+    const helped=LEGACY_FAMILIES+total;
+    document.getElementById('famCount').textContent=fmt(helped); {const fs=document.querySelector('.mstat.fam'); if(fs) fs.style.display=helped?'':'none';} if(typeof drawFamPings==='function') drawFamPings();
+    document.getElementById('famLbl').textContent=helped===1?'family helped so far':'families helped so far';
   }
   // tooltip + interactive states
   const tip=document.getElementById('tip'), mapWrap=document.getElementById('mapWrap');
