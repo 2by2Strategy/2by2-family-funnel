@@ -331,7 +331,10 @@ function render(focus){
   if(focus){ var f=stage.querySelector('input,textarea,.opt,.num'); if(f && (s.type==='name'||s.type==='text'||s.type==='contact')) f.focus({preventScroll:true}); }
 }
 
-function go(n){ hist.push(idx); idx=n; render(true); scrollQuiz(); }
+function go(n){ hist.push(idx); idx=n; render(true); scrollQuiz(); progress(); }
+/* save a sheet row from the first answer on (sheet only, never GHL), so drop-offs show up before they leave an email */
+var QCOUNT = STEPS.filter(function(s){return s.type!=='done'}).length, BEST = 0;
+function progress(){ var t=STEPS[idx]&&STEPS[idx].type; if(t==='done' || idx<=BEST) return; BEST=idx; send('progress'); }
 /* ---------- NOT A FIT: answers that end the questionnaire right away ----------
    Edit these rules to change who gets screened out. Each returns a reason code (or '' to keep going). */
 function notAFit(id){
@@ -487,8 +490,9 @@ function summary(){ // one readable block for the GHL contact (Counselor Applica
   return L.filter(function(x){return x[1]}).map(function(x){return x[0]+': '+x[1]}).join('\n'); }
 function send(stage){
   var payload={stage:stage, sid:SID, answers:A, f:flat(), utm:UTM, page:location.href, ts:new Date().toISOString(), source:'2by2-counselor-funnel'};
+  if(stage==='progress'){ payload.answered=idx; payload.total=QCOUNT; }
   if(SHEET_URL){ try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({type:'counselor'},payload)),keepalive:true}); }catch(e){} }
-  if(WEBHOOK_URL && stage!=='book'){ try{ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}); }catch(e){} }
+  if(WEBHOOK_URL && stage!=='book' && stage!=='progress'){ try{ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}); }catch(e){} }
 }
 
 

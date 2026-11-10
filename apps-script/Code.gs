@@ -118,13 +118,19 @@ function counselor_(d) {
     }
     var prev = row ? sh.getRange(row, 1, 1, COUNSELOR_HEAD.length).getValues()[0] : null;
     var status = { partial: 'Started (left email)', complete: 'Completed', book: 'Completed', disqualified: 'Not a fit', waitlist: 'Not a fit' }[d.stage] || 'Started';
-    if (prev && prev[2] === 'Completed' && d.stage === 'partial') status = 'Completed';
+    if (d.stage === 'progress') status = 'Started (answered ' + (parseInt(d.answered, 10) || 0) + ' of ' + (parseInt(d.total, 10) || 0) + ')';
+    // never move a row backwards: in progress < left email < completed / not a fit
+    var rank = function (st) { st = String(st || ''); return /^(Completed|Not a fit)/.test(st) ? 3 : st === 'Started (left email)' ? 2 : st ? 1 : 0; };
+    var num = function (st) { var m = String(st || '').match(/answered (\d+)/); return m ? +m[1] : 0; };
+    if (prev && (rank(prev[2]) > rank(status) || (rank(prev[2]) === 1 && rank(status) === 1 && num(prev[2]) > num(status)))) status = prev[2];
     var values = [prev ? prev[0] : new Date(), new Date(), status, d.stage === 'book' ? 'Yes' : (prev ? prev[3] : 'No'),
       clean_(f.counselor_type), clean_(a.firstName, 80), clean_(a.lastName, 80), clean_(a.business, 160), clean_(a.email, 160), clean_((a.cc || '') + ' ' + (a.phone || ''), 40),
       clean_(a.website, 200), clean_(a.capacity, 5), clean_(f.background, 300), clean_(f.families_per_year, 40), clean_(f.package_price, 40),
       clean_(f.lead_sources, 300), clean_(f.biggest_need, 300), clean_(a.describe, 2000), clean_(f.found_us, 200), clean_(f.start_timeline, 60), clean_(f.can_invest_3k, 60), a.consent ? 'Yes' : (prev ? prev[21] : 'No'), clean_(f.not_a_fit, 40), a.emailList ? 'Yes' : (prev ? prev[23] : 'No'),
       clean_(u.utm_source, 100), clean_(u.utm_medium, 100), clean_(u.utm_campaign, 150), clean_(u.utm_content, 150), clean_(u.fbclid, 200), clean_(u.gclid, 200),
       clean_(d.page, 300), sid];
+    // an update that arrives late (fewer answers) never blanks out what's already saved
+    if (prev) for (var k = 4; k < values.length; k++) if (values[k] === '' || values[k] == null) values[k] = prev[k];
     if (row) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
   } finally { lock.releaseLock(); }
   return json_({ ok: true });
