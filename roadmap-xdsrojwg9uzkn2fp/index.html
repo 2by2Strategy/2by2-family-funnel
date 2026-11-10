@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<script src="../track.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Your Roadmap Is On Its Way | 2by2 Academy</title>
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@500&display=swap">
+<style>
+:root{color-scheme:only light;--p:#5A3FD6;--ink:#16122A;--body:#3E3A52;--mut:#6A6682;--line:#E4DFF5;--hi:#FFE45C}
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:var(--body);font:400 17px/1.6 Archivo,system-ui,-apple-system,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:28px 20px 56px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.top img{height:44px;width:auto;display:block}
+.k{font:500 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--p)}
+h1{font-family:Archivo,sans-serif;font-stretch:75%;font-weight:900;text-transform:uppercase;color:var(--p);font-size:clamp(46px,11vw,76px);line-height:.9;margin:34px 0 14px;letter-spacing:0}
+.lead{font-size:19px;line-height:1.5;color:var(--ink);margin:0 0 26px}
+mark{background:linear-gradient(var(--hi),var(--hi)) no-repeat 0 82%/100% 46%;color:inherit;padding:0 3px;margin:0 -3px}
+.card{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:0 0 14px;background:#fff}
+.card h2{font-family:Archivo,sans-serif;font-stretch:75%;font-weight:900;text-transform:uppercase;font-size:22px;line-height:1;color:var(--ink);margin:6px 0 10px;letter-spacing:.005em}
+.card p{margin:0 0 10px}.card p:last-child{margin:0}
+.card.p{background:var(--p);border-color:var(--p);color:#fff}
+.card.p h2{color:#fff}.card.p .k{color:#fff;opacity:.8}
+ol{margin:0;padding-left:20px}ol li{margin-bottom:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--p);color:#fff;font-weight:700;font-size:16px;text-decoration:none;border-radius:999px;padding:13px 22px;margin-top:6px}
+.btn:hover{background:#4A31C4}
+.btn.w{background:#fff;color:var(--p)}
+.btn.w:hover{background:#F4F1FF}
+.small{font-size:14px;color:var(--mut)}
+.card.p .small{color:#fff;opacity:.85}
+a{color:var(--p)}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:inherit}
+</style>
+<body>
+<div class="wrap">
+  <header class="top"><a href="/" aria-label="2by2 Academy home"><img src="../favicon.png" alt="2by2 Academy"></a><span class="k">Order confirmed</span></header>
+
+  <main>
+    <h1>It's on<br>its way.</h1>
+    <p class="lead">Your 2by2 Roadmap is heading to your inbox right now. It usually lands within <mark>a few minutes.</mark></p>
+
+    <section class="card">
+      <span class="k">Can't find the email?</span>
+      <h2>Check these three places</h2>
+      <ol>
+        <li>Your Promotions or Spam folder.</li>
+        <li>Search your inbox for "2by2 Roadmap."</li>
+        <li>Make sure it's the email you typed at checkout.</li>
+      </ol>
+      <p style="margin-top:12px">Or skip the wait and grab it here:</p>
+      <a class="btn" id="dl" href="https://drive.google.com/uc?export=download&amp;id=1vQAfJ46iQYT588E2__K6PfR1X6gqdc6O">Download the PDF <span aria-hidden="true">&darr;</span></a>
+      <p class="small" style="margin-top:12px">Still stuck? Write to <a href="mailto:team@2by2academy.co">team@2by2academy.co</a> and we'll send it ourselves.</p>
+    </section>
+
+    <section class="card">
+      <span class="k">Tonight, if you've got ten minutes</span>
+      <h2>Where to start</h2>
+      <ol>
+        <li>Open page 2 and find your row. It tells you which pages are yours.</li>
+        <li>Do the "Am I on track?" check for your grade.</li>
+        <li>Write down the three things no one else at your school could say about themselves (page 16).</li>
+      </ol>
+    </section>
+
+    <section class="card p">
+      <span class="k">Whenever you're ready</span>
+      <h2>Want a person in your corner?</h2>
+      <p>The Roadmap tells you what to do. A good counselor tells you which of it matters most for your student. Our matchmaking call is free, 30 minutes, and nobody will pitch you.</p>
+      <a class="btn w" href="/matchmaking/">Book a matchmaking call <span aria-hidden="true">&rsaquo;</span></a>
+    </section>
+  </main>
+
+  <footer><span>&copy; 2026 2by2 Strategy LLC &middot; Two by your side.</span><span><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a></span></footer>
+</div>
+<script>
+(function(){
+  var sid = new URLSearchParams(location.search).get('session_id') || '';
+  var key = '2by2_roadmap_purchase_' + sid;
+  try {
+    if (sid && !localStorage.getItem(key)) {
+      localStorage.setItem(key, '1');
+      if (window.tt) window.tt('Purchase', { value: 19.99, currency: 'USD', content_name: '2by2 Roadmap (Digital Edition)' });
+    }
+  } catch (e) {}
+  var dl = document.getElementById('dl');
+  if (dl) dl.addEventListener('click', function(){ try { if (window.tt) window.tt('RoadmapBackupDownload', {}); } catch (e) {} });
+})();
+</script>
+</html>

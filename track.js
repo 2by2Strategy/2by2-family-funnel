@@ -49,7 +49,7 @@
 
   /* ---------- one call for both platforms ---------- */
   // Standard Meta events used: Lead, Schedule, Contact. Everything else goes to Meta as a custom event.
-  var META_STD = { Lead: 1, Schedule: 1, Contact: 1, ViewContent: 1 };
+  var META_STD = { Lead: 1, Schedule: 1, Contact: 1, ViewContent: 1, Purchase: 1 };
   var GA_NAME = { Lead: 'generate_lead', Schedule: 'book_call', Contact: 'chat_lead', StartQuiz: 'quiz_start', QuizStep: 'quiz_step', BookingClick: 'booking_click' };
   window.tt = function (name, params) {
     params = params || {};
