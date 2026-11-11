@@ -246,6 +246,8 @@ var STEPS = [
   {id:'role', type:'single', title:function(){return 'Are you an independent college counselor?'},
    opts:[['solo','Yes, I run my own practice','person'],['firm','Yes, I run a firm with other counselors','firm'],['school','I’m a school-based counselor','school'],['other','Not a counselor yet','help']]},
   {id:'name', type:'name', title:function(){return 'What’s your name and business?'}, sub:function(){return 'So we know who we’re talking to.'}},
+  {id:'contact', type:'contact', title:function(){return 'Where can we reach you?'},
+   sub:function(){return 'So we can send you the next step. We never share your info.'}},
   {id:'capacity', type:'scale', title:function(){return 'How full is '+(isFirm()?'your firm’s':'your')+' calendar this admissions cycle?'},
    sub:function(){return '1 = wide open, 10 = fully booked'}, ends:['Wide open','Fully booked']},
   {id:'background', type:'multi', title:function(){return 'What’s your background?'}, sub:function(){return 'Select all that apply.'}, cols:3,
@@ -266,8 +268,6 @@ var STEPS = [
    opts:[['now','Immediately','bolt'],['1w','Within the next week','calendar'],['2-4w','2–4 weeks','calendar'],['nextmonth','Next month','calendar'],['exploring','Just exploring for now','eye']]},
   {id:'invest', type:'single', title:function(){return 'Are you able to invest at least $3,000 into '+(isFirm()?'your firm':'your business')+' to start scaling?'}, cols:3,
    opts:[['yes','Yes, I’m ready to invest','check'],['call','Yes, if it makes sense after the call','help'],['no','Not right now','none']]},
-  {id:'contact', type:'contact', title:function(){return 'Let’s book your fit call'},
-   sub:function(){return 'A free 20-minute call to walk you through how 2by2 matches families to counselors, and whether '+you()+(isFirm()?' fits':' fit')+' the network.'}},
   {id:'done', type:'done'}
 ];
 
@@ -323,7 +323,7 @@ function render(focus){
       '<input class="field" id="ph" type="tel" autocomplete="tel-national" placeholder="(201) 555-0123" value="'+esc(A.phone||'')+'"></div></div>'+
       '<div><label for="ws">'+(isFirm()?'Your firm’s website':'Your website')+' <span class="opt-l">(optional)</span></label><input class="field" id="ws" type="url" autocomplete="url" inputmode="url" placeholder="yourpractice.com" value="'+esc(A.website||'')+'"></div>'+
       '<label class="consent"><input type="checkbox" id="ok"'+(A.consent?' checked':'')+'><span>I agree to receive text messages from 2by2 Academy (2by2 Strategy LLC) about my inquiry, including replies to my questions, call scheduling and reminders. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of any purchase. Texts are sent to US mobile numbers only. <a href="../privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="../terms.html" target="_blank" rel="noopener">Terms</a></span></label>'+
-      '</div><div class="err" id="err"></div><button class="cta" id="next" type="button">Book my fit call &rarr;</button>';
+      '</div><div class="err" id="err"></div><button class="cta" id="next" type="button">Continue &rarr;</button>';
   }
   h+='</div>';
   stage.innerHTML=h;
@@ -349,7 +349,16 @@ var NOT_FIT_LINE = {
   invest:'Joining the network takes an upfront investment in your practice, so now may not be the right time.'
 };
 var KILLED = '';
-function next(){ var r=notAFit(STEPS[idx].id); if(r){ kill(r); return; } go(idx+1); }
+/* Meta B2B lead: the first answered question counts as a lead (standard SubmitApplication, once per visit) */
+var B2B_LEAD_SENT = false;
+function b2bLead(){ if(B2B_LEAD_SENT) return; B2B_LEAD_SENT=true;
+  try{ if(window.fbq) fbq('track','SubmitApplication',{content_name:'counselor quiz', first_question:STEPS[idx].id}); }catch(e){} }
+function next(){
+  b2bLead();
+  var r=notAFit(STEPS[idx].id); if(r){ kill(r); return; }
+  if(STEPS[idx+1] && STEPS[idx+1].type==='done'){ send('complete'); track('Lead'); }   // finished every question
+  go(idx+1);
+}
 function scrollQuiz(){ window.scrollTo({top:0,behavior:'smooth'}); }
 function err(m){ var e=document.getElementById('err'); if(e) e.textContent=m||''; }
 
@@ -397,7 +406,7 @@ function bind(s){
       if(!okEmail(e)) return err('Please enter a valid email.');
       if(p.replace(/\D/g,'').length<7) return err('Please enter a valid phone number.');
       A.email=e; A.phone=val('ph'); A.cc=cc.value; A.website=val('ws'); A.consent=document.getElementById('ok').checked;
-      send('complete'); track('Lead'); next();
+      send('partial'); next();
     };
     document.getElementById('next').onclick=go2; enter(go2);
   }

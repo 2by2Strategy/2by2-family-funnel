@@ -63,9 +63,8 @@
   window.tt = function (name, params) {
     params = params || {};
     try { if (window.fbq) { META_STD[name] ? fbq('track', name, params) : fbq('trackCustom', name, params); } } catch (e) {}
-    // Counselor (B2B) quiz completions also send Meta's standard "SubmitApplication" event,
-    // so B2B campaigns can optimize on it while family (B2C) campaigns optimize on Lead.
-    try { if (window.fbq && name === 'CounselorLead') fbq('track', 'SubmitApplication', params); } catch (e) {}
+    // B2B note: the counselor quiz sends Meta's standard "SubmitApplication" itself, as soon as a counselor
+    // answers their first question (see b2bLead() in counselors/quiz.html). CounselorLead = finished the whole quiz.
     try { if (window.gtag) gtag('event', GA_NAME[name] || name, params); } catch (e) {}
   };
 })();

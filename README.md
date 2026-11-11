@@ -4,7 +4,7 @@
 - `matchmaking/index.html` – funnel landing page (hero, trust bar, → Get started)
 - `matchmaking/quiz.html` – the 10-question matchmaking questionnaire
 - `counselors/index.html` – counselor (B2B) landing page, same look as the family funnel (→ Get started)
-- `counselors/quiz.html` – the 10-question counselor questionnaire (answers go to the sheet's "Counselor Quiz" tab)
+- `counselors/quiz.html` – the counselor questionnaire (answers go to the sheet's "Counselor Quiz" tab). Order: role → name → email/phone → screening questions. Meta `SubmitApplication` (the B2B ad set's conversion event) fires once on the first answered question; `CounselorLead` fires when they finish every question
 - `counselors/booked.html` – page counselors land on after booking the partner call: the VSL (`counselors/vsl/`) on top, then the counselor landing page. Set it as the redirect URL on the GHL "2by2 Partner Call" calendar. Sends Meta `Schedule` once per browser, plus VSL play/progress events.
 - `start/index.html` – phone landing page for Instagram/ManyChat: the Roadmap ($19.99, Stripe Payment Link in `ROADMAP_URL`) and the matchmaking call, plus student review screenshots in `start/reviews/`
 - `roadmap-xdsrojwg9uzkn2fp/` – Roadmap thank-you page (unlisted URL; holds the PDF). It is the Stripe Payment Link's after-payment redirect (`?session_id={CHECKOUT_SESSION_ID}`): instant PDF download, and sends Meta `Purchase` + GA4 `purchase` ($19.99) once per checkout session.
