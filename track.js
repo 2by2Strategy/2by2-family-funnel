@@ -2,6 +2,15 @@
    Fill in the two IDs below. Leave one blank to switch that platform off.
    Every page loads this file; pages call window.tt(name, params) for funnel events. */
 (function () {
+  /* ---------- always use https on the live domain ----------
+     Ad clicks were landing on http://2by2academy.co. Send them to the https version (same path,
+     query string with fbclid/utm, and hash) before anything else runs, so tracking and storage
+     happen on one secure origin. */
+  if (location.protocol === 'http:' && /(^|\.)2by2academy\.co$/i.test(location.hostname)) {
+    location.replace('https://' + location.host + location.pathname + location.search + location.hash);
+    return;
+  }
+
   var META_PIXEL_ID = '1640187167617419';   // 2by2 Academy dataset (Meta Events Manager, business portfolio 2by2 Academy)
   var GA4_ID        = 'G-ZT24DXBJMW';   // 2by2academy.co web stream (jackson@2by2academy.co)    (Google Analytics > Admin > Data streams)
 
