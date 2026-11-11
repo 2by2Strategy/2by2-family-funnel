@@ -394,6 +394,7 @@ body{-webkit-tap-highlight-color:transparent}
 <script>
 /* ===== SETTINGS ===== */
 var ROADMAP_URL     = 'https://buy.stripe.com/fZu9AMfhBbvU1HH5ni2ZO00'; // Stripe Payment Link: 2by2 Roadmap (Digital Edition), $19.99 -> thank-you page
+var ROADMAP_PAGE    = '../roadmap/'; // preview page (flip through the pages) -> Stripe checkout
 var STARTER_WEBHOOK = '';  // GHL inbound webhook for the free Starter Kit ("ROADMAP 1 - Starter Kit Intake"). Leave blank to hide the free option.
 /* ==================== */
 (function(){
@@ -402,8 +403,8 @@ var STARTER_WEBHOOK = '';  // GHL inbound webhook for the free Starter Kit ("ROA
   // Roadmap links
   var roadLinks=[document.getElementById('goRoad')].concat([].slice.call(document.querySelectorAll('[data-road]')));
   roadLinks.forEach(function(a){
-    a.href=ROADMAP_URL;
-    a.addEventListener('click',function(){ track('InitiateCheckout',{content_name:'4-Year Roadmap',value:19.99,currency:'USD'}); });
+    a.href=ROADMAP_PAGE;
+    a.addEventListener('click',function(){ track('RoadmapPreviewClick',{from:'start'}); });
   });
   document.querySelectorAll('a[href="../matchmaking/"]').forEach(function(a){
     a.addEventListener('click',function(){ track('MatchmakingClick',{from:'start'}); });
