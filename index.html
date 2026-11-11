@@ -1846,11 +1846,11 @@ footer.ink{margin-top:0!important}
       </article>
       <article class="of-c of-c2">
         <span class="of-badge"><span class="brandmark" role="img" aria-label="2by2"></span></span>
-        <span class="of-kick">Get answers yourself</span>
-        <h3 class="of-t">Ask 2by2</h3>
-        <p class="of-p">Lists, essays, aid, deadlines. Ask anything about college admissions and get a straight answer in seconds, any time of day.</p>
-        <a class="of-btn" href="#top" id="ofAsk">Ask a question</a>
-        <p class="of-proof"><b>Free</b>, anytime.</p>
+        <span class="of-kick">Map it out yourself</span>
+        <h3 class="of-t">Roadmap</h3>
+        <p class="of-p">The 4&#8209;Year Roadmap. Every grade from 9th to 12th: what to do each month, each summer, and before every deadline, with an on&#8209;track check for your year.</p>
+        <a class="of-btn" href="roadmap/" id="ofRoad">Get the Roadmap</a>
+        <p class="of-proof"><b>$19.99</b>, instant PDF download.</p>
       </article>
     </div>
   </div></section>
@@ -2860,7 +2860,7 @@ const STATES={"AL":{"x":671.6,"y":432.2,"lon":-86.83,"lat":32.78,"name":"Alabama
     new IntersectionObserver(function(e,o){if(e[0].isIntersecting){z.classList.add('on');o.disconnect()}},{threshold:.25}).observe(z)})();
   (function(){var o=document.querySelector('.of');if(!o)return;new IntersectionObserver(function(e,ob){if(e[0].isIntersecting){o.classList.add('on');ob.disconnect()}},{threshold:.2}).observe(o);
     
-    document.getElementById('ofAsk').addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){var t=document.getElementById('askInput');if(t)t.focus({preventScroll:true})},700)});
+    document.getElementById('ofRoad').addEventListener('click',function(){try{if(window.tt)window.tt('RoadmapPreviewClick',{from:'home'})}catch(e){}});
     
   })();
   // ----- family map -----
