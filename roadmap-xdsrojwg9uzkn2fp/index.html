@@ -83,9 +83,14 @@ footer a{color:inherit}
   var sid = new URLSearchParams(location.search).get('session_id') || '';
   var key = '2by2_roadmap_purchase_' + sid;
   try {
-    if (sid && !localStorage.getItem(key)) {
+    if (/^cs_[A-Za-z0-9_]{10,}$/.test(sid) && !localStorage.getItem(key)) {
       localStorage.setItem(key, '1');
-      if (window.tt) window.tt('Purchase', { value: 19.99, currency: 'USD', content_name: '2by2 Roadmap (Digital Edition)' });
+      var P = { value: 19.99, currency: 'USD', content_name: '2by2 Roadmap (Digital Edition)' };
+      // Meta: session ID as eventID so the same checkout is never counted twice
+      if (window.fbq) fbq('track', 'Purchase', P, { eventID: sid });
+      // GA4: standard ecommerce "purchase" (shows in Monetization reports), deduped by transaction_id
+      if (window.gtag) gtag('event', 'purchase', { transaction_id: sid, value: P.value, currency: P.currency,
+        items: [{ item_id: 'roadmap', item_name: P.content_name, price: P.value, quantity: 1 }] });
     }
   } catch (e) {}
   var dl = document.getElementById('dl');
