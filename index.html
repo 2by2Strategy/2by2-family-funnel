@@ -13,7 +13,7 @@
 <title>2by2 Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Barlow+Condensed:wght@800;900&family=Geist+Mono:wght@400;500&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Barlow+Condensed:wght@800;900&family=Caveat:wght@600;700&family=Geist+Mono:wght@400;500&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
 :root{
   color-scheme: light;
@@ -1481,6 +1481,15 @@ footer.ink{margin-top:0!important}
 .of-form>form{padding-top:0}
 .of-c1.open .of-form>form{padding-top:26px}
 .of-form>form{transition:padding .6s}
+/* handwritten "sold out" callout above the Roadmap card */
+.of-c2{overflow:visible}
+.rm-call{position:absolute;right:6px;top:-86px;margin:0;text-align:right;pointer-events:none;transform:rotate(-3deg);transform-origin:100% 100%}
+.rm-call b{display:block;font:700 28px/1 "Caveat",cursive;color:#FFE45C;white-space:nowrap}
+.rm-call span{display:block;margin-top:4px;font:600 22px/1 "Caveat",cursive;color:#fff;opacity:.92;white-space:nowrap}
+.rm-arrow{position:absolute;right:10px;top:-22px;width:64px;height:150px;overflow:visible;pointer-events:none}
+.rm-arrow path{fill:none;stroke:#FFE45C;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.of-grid{margin-top:clamp(110px,9vw,130px)}
+@media (max-width:760px){.of-grid{gap:130px}}
 #fxSegs{transform-box:view-box;transform-origin:110px 110px;transition:transform 1.1s cubic-bezier(.65,0,.2,1)}
 #fxSegs path{opacity:0!important;transition:opacity .8s ease}
 #fxSegs.on path{opacity:.9!important}
@@ -1845,6 +1854,8 @@ footer.ink{margin-top:0!important}
         <p class="of-proof"><b>Free</b> first call. We keep matching until it fits.</p>
       </article>
       <article class="of-c of-c2">
+        <p class="rm-call" aria-label="Physical copy sold out. Get online version today."><b>Physical copy sold out.</b><span>Get online version today!</span></p>
+        <svg class="rm-arrow" viewBox="0 0 64 150" aria-hidden="true"><path d="M44 4 C 70 46, 66 112, 14 136"/><path d="M28 124 L13 137 L31 143"/></svg>
         <span class="of-badge"><span class="brandmark" role="img" aria-label="2by2"></span></span>
         <span class="of-kick">Map it out yourself</span>
         <h3 class="of-t">Roadmap</h3>
