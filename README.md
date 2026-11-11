@@ -7,6 +7,7 @@
 - `counselors/quiz.html` – the 10-question counselor questionnaire (answers go to the sheet's "Counselor Quiz" tab)
 - `counselors/booked.html` – page counselors land on after booking the partner call: the VSL (`counselors/vsl/`) on top, then the counselor landing page. Set it as the redirect URL on the GHL "2by2 Partner Call" calendar. Sends Meta `Schedule` once per browser, plus VSL play/progress events.
 - `start/index.html` – phone landing page for Instagram/ManyChat: the Roadmap ($19.99, Stripe Payment Link in `ROADMAP_URL`) and the matchmaking call, plus student review screenshots in `start/reviews/`
+- `roadmap/thanks/` – Roadmap thank-you page. Set it as the Stripe Payment Link's after-payment redirect: `https://2by2academy.co/roadmap/thanks/?session_id={CHECKOUT_SESSION_ID}`. Sends Meta `Purchase` and GA4 `purchase` ($19.99) once per checkout session; visits without a Stripe session ID send nothing.
 - `quiz.html` – redirect to `matchmaking/quiz.html` (keeps old links working)
 
 ## Before running ads

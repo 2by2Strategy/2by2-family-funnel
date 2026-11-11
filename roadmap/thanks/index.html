@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<script src="../../track.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex">
+<title>Your Roadmap Is On Its Way | 2by2 Academy</title>
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{color-scheme:only light;--p:#5640CE;--p2:#8F75EF;--ink:#16151A;--body:#5C5C66;--line:#DDD5F8;--soft:#F7F4FE}
+*{box-sizing:border-box}
+html,body{margin:0;background:#FCFBFF;color:var(--body);font:400 17px/1.65 Inter,system-ui,-apple-system,sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 600px at 100% 0%,rgba(204,190,245,.8),rgba(204,190,245,0) 70%),radial-gradient(700px 520px at 0% 100%,rgba(204,190,245,.45),rgba(204,190,245,0) 70%)}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px 64px}
+.brand{font:400 30px/.9 Anton,Impact,sans-serif;color:var(--p);text-transform:uppercase;text-decoration:none;display:inline-block}
+.brand small{display:block;font-size:.72em}
+.card{margin-top:34px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(24px,5vw,44px);box-shadow:0 14px 40px rgba(86,64,206,.10)}
+.tick{width:56px;height:56px;border-radius:50%;background:var(--soft);border:1px solid var(--line);display:grid;place-items:center}
+.tick svg{width:28px;height:28px;stroke:var(--p);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+h1{font:400 clamp(40px,8vw,64px)/1 Anton,Impact,sans-serif;text-transform:uppercase;color:var(--p);margin:18px 0 10px}
+h1 span{color:var(--p2)}
+h2{font:600 18px/1.3 Inter,sans-serif;color:var(--ink);margin:28px 0 10px}
+ol{margin:0;padding-left:22px}ol li{margin-bottom:8px}
+a{color:var(--p)}
+.sign{margin-top:26px;color:var(--ink)}
+.next{margin-top:28px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.next p{margin:0 0 12px}
+.btn{display:inline-block;background:var(--p);color:#fff;font-weight:600;text-decoration:none;padding:12px 20px;border-radius:999px}
+.home{display:inline-block;margin-top:22px;font-weight:600;text-decoration:none}
+footer{text-align:center;font-size:13px;color:#7A7590;margin-top:30px}
+footer a{color:inherit}
+</style>
+<div class="wrap">
+  <a class="brand" href="../../">2by2<small>Academy</small></a>
+  <main class="card">
+    <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h1>You&rsquo;re <span>in</span></h1>
+    <p>Thank you. Your 4-Year Roadmap is on its way to the email you used at checkout.</p>
+    <h2>What happens now</h2>
+    <ol>
+      <li>Look for an email from <strong>team@2by2academy.co</strong> in the next few minutes.</li>
+      <li>Not there? Check Promotions or Spam, and move it to your inbox so you don&rsquo;t miss future updates.</li>
+      <li>Open the Roadmap, find your grade, and start with this month.</li>
+    </ol>
+    <p style="margin-top:22px">Still nothing after 15 minutes? Write to <a href="mailto:team@2by2academy.co">team@2by2academy.co</a> and we&rsquo;ll send it right over.</p>
+    <div class="next">
+      <p><strong>Want someone in your corner, too?</strong> We match families with a vetted counselor who fits your student. The first call is free.</p>
+      <a class="btn" id="mm" href="../../matchmaking/">See how matchmaking works</a>
+    </div>
+    <p class="sign">Glad you&rsquo;re here,<br>The 2by2 Team</p>
+    <a class="home" href="../../">&larr; Back to 2by2 Academy</a>
+  </main>
+  <footer>&copy; 2026 2by2 Strategy LLC &middot; <a href="../../privacy.html">Privacy Policy</a> &middot; <a href="../../terms.html">Terms</a></footer>
+</div>
+<script>
+/* Purchase tracking.
+   Stripe Payment Link -> "After payment: redirect" to
+   https://2by2academy.co/roadmap/thanks/?session_id={CHECKOUT_SESSION_ID}
+   Fires Meta "Purchase" + GA4 "purchase" once per checkout session (refreshes and
+   revisits don't double-count; the session ID is also sent as the dedupe key).
+   Visits without a real Stripe session ID (cs_...) fire nothing. */
+(function(){
+  var VALUE = 19.99, CURRENCY = 'USD', NAME = '4-Year Roadmap';
+  var sid = new URLSearchParams(location.search).get('session_id') || '';
+  if (/^cs_[A-Za-z0-9_]{10,}$/.test(sid)) {
+    var KEY = '2by2_purchased', done = [];
+    try { done = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { done = []; }
+    if (done.indexOf(sid) === -1) {
+      var a = window.TWOBY2_ATTR || {};
+      try { if (window.fbq) fbq('track', 'Purchase', { value: VALUE, currency: CURRENCY, content_name: NAME, content_type: 'product' }, { eventID: sid }); } catch (e) {}
+      try { if (window.gtag) gtag('event', 'purchase', { transaction_id: sid, value: VALUE, currency: CURRENCY,
+        items: [{ item_id: 'roadmap', item_name: NAME, price: VALUE, quantity: 1 }],
+        first_utm_source: a.utm_source || '', first_utm_campaign: a.utm_campaign || '' }); } catch (e) {}
+      done.push(sid);
+      try { localStorage.setItem(KEY, JSON.stringify(done.slice(-20))); } catch (e) {}
+    }
+    // keep the session ID out of the address bar so shared links don't carry it
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
+  document.getElementById('mm').addEventListener('click', function(){
+    try { if (window.tt) tt('MatchmakingClick', { from: 'roadmap-thanks' }); } catch (e) {}
+  });
+})();
+</script>
+</html>
