@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="only light">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<title>Your Roadmap Is On Its Way | 2by2 Academy</title>
+<title>Your Free Roadmap | 2by2 Academy</title>
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@500&display=swap">
@@ -39,25 +39,17 @@ footer a{color:inherit}
 </style>
 <body>
 <div class="wrap">
-  <header class="top"><a href="/" aria-label="2by2 Academy home"><img src="../favicon.png" alt="2by2 Academy"></a><span class="k">Order confirmed</span></header>
+  <header class="top"><a href="/" aria-label="2by2 Academy home"><img src="../favicon.png" alt="2by2 Academy"></a><span class="k">Free download</span></header>
 
   <main>
-    <h1>It's on<br>its way.</h1>
-    <p class="lead">Your 2by2 Roadmap is heading to your inbox right now. It usually lands within <mark>a few minutes.</mark></p>
-
+    <h1>It's<br>yours.</h1>
+    <p class="lead">Your free 2by2 Roadmap is ready. Download it now, and <mark>we're emailing you a copy too.</mark></p>
     <section class="card">
-      <span class="k">Can't find the email?</span>
-      <h2>Check these three places</h2>
-      <ol>
-        <li>Your Promotions or Spam folder.</li>
-        <li>Search your inbox for "2by2 Roadmap."</li>
-        <li>Make sure it's the email you typed at checkout.</li>
-      </ol>
-      <p style="margin-top:12px">Or skip the wait and grab it here:</p>
+      <span class="k">The 4-Year Roadmap &middot; 86 pages</span>
+      <h2>Your do-it-yourself plan</h2>
       <a class="btn" id="dl" href="2by2-Roadmap-2026-27.pdf" download="2by2 Roadmap 2026-27.pdf">Download the PDF <span aria-hidden="true">&darr;</span></a>
-      <p class="small" style="margin-top:12px">Still stuck? Write to <a href="mailto:team@2by2academy.co">team@2by2academy.co</a> and we'll send it ourselves.</p>
+      <p class="small" style="margin-top:12px">Email not showing up? Check Promotions or Spam, or write to <a href="mailto:team@2by2academy.co">team@2by2academy.co</a> and we'll send it ourselves.</p>
     </section>
-
     <section class="card">
       <span class="k">Tonight, if you've got ten minutes</span>
       <h2>Where to start</h2>
@@ -80,21 +72,8 @@ footer a{color:inherit}
 </div>
 <script>
 (function(){
-  var sid = new URLSearchParams(location.search).get('session_id') || '';
-  var key = '2by2_roadmap_purchase_' + sid;
-  try {
-    if (/^cs_[A-Za-z0-9_]{10,}$/.test(sid) && !localStorage.getItem(key)) {
-      localStorage.setItem(key, '1');
-      var P = { value: 19.99, currency: 'USD', content_name: '2by2 Roadmap (Digital Edition)' };
-      // Meta: session ID as eventID so the same checkout is never counted twice
-      if (window.fbq) fbq('track', 'Purchase', P, { eventID: sid });
-      // GA4: standard ecommerce "purchase" (shows in Monetization reports), deduped by transaction_id
-      if (window.gtag) gtag('event', 'purchase', { transaction_id: sid, value: P.value, currency: P.currency,
-        items: [{ item_id: 'roadmap', item_name: P.content_name, price: P.value, quantity: 1 }] });
-    }
-  } catch (e) {}
   var dl = document.getElementById('dl');
-  if (dl) dl.addEventListener('click', function(){ try { if (window.tt) window.tt('RoadmapBackupDownload', {}); } catch (e) {} });
+  if (dl) dl.addEventListener('click', function(){ try { if (window.tt) window.tt('RoadmapDownload', {}); } catch (e) {} });
 })();
 </script>
 </html>

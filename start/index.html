@@ -284,7 +284,7 @@ body{-webkit-tap-highlight-color:transparent}
     </div>
     <div class="hero">
       <h1>Two ways to start your <em>story.</em></h1>
-      <p>Plan it yourself with the 4&#8209;Year Roadmap, or let us find the counselor who truly fits your student.</p>
+      <p>Plan it yourself with the free 4&#8209;Year Roadmap, or let us find the counselor who truly fits your student.</p>
       <a class="hero-jump" href="#offer"><span>Choose your path</span><span class="jump-c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg></span></a>
     </div>
   </div>
@@ -295,36 +295,14 @@ body{-webkit-tap-highlight-color:transparent}
     <h2 class="of-k" id="ofTitle">Our offering</h2>
     <div class="of-grid" id="ofGrid">
       <article class="of-c of-c2" id="roadCard">
-        <p class="rm-call" aria-label="Physical copy sold out. Get online version today."><b>Physical copy sold out.</b><span>Get online version today!</span></p>
+        <p class="rm-call" aria-label="Physical copy sold out. The online version is now free."><b>Physical copy sold out.</b><span>Online version now free!</span></p>
         <svg class="rm-arrow" viewBox="0 0 64 150" aria-hidden="true"><path d="M44 4 C 70 46, 66 112, 14 136"/><path d="M28 124 L13 137 L31 143"/></svg>
         <span class="of-badge"><span class="brandmark" role="img" aria-label="2by2 Academy"></span></span>
-        <span class="of-kick">Map it out yourself</span>
+        <span class="of-kick">Do it yourself</span>
         <h3 class="of-t">Roadmap</h3>
-        <p class="of-p">The 4&#8209;Year Roadmap. Every grade from 9th to 12th: what to do each month, each summer, and before every deadline, with an on&#8209;track check for your year.</p>
-        <a class="of-btn" href="#" id="goRoad">Get the Roadmap</a>
-        <p class="of-proof"><b>$19.99</b>, instant PDF download.</p>
-        <button type="button" class="of-free" id="freeBtn" hidden>Not ready? <u>Start with the free Starter Kit</u></button>
-        <div class="kit" id="kit" hidden>
-          <form id="kitForm" novalidate>
-            <span class="kit-l" id="gradeL">Your grade</span>
-            <fieldset class="grades" aria-labelledby="gradeL">
-              <label><input type="radio" name="grade" value="9"><span>9th</span></label>
-              <label><input type="radio" name="grade" value="10"><span>10th</span></label>
-              <label><input type="radio" name="grade" value="11"><span>11th</span></label>
-              <label><input type="radio" name="grade" value="12"><span>12th</span></label>
-            </fieldset>
-            <div class="kit-row">
-              <input class="kit-in" id="kitName" name="first_name" autocomplete="given-name" placeholder="First name" aria-label="First name">
-              <select class="kit-in" id="kitRole" name="role" aria-label="I am a">
-                <option value="student">I&rsquo;m a student</option>
-                <option value="parent">I&rsquo;m a parent</option>
-              </select>
-            </div>
-            <input class="kit-in" id="kitEmail" name="email" type="email" autocomplete="email" placeholder="you@email.com" aria-label="Email">
-            <button class="of-btn" type="submit">Send my Starter Kit</button>
-            <p class="kit-msg" id="kitMsg" aria-live="polite"></p>
-          </form>
-        </div>
+        <p class="of-p">The 4&#8209;Year Roadmap, the do&#8209;it&#8209;yourself plan. Every grade from 9th to 12th: what to do each month, each summer, and before every deadline, with an on&#8209;track check for your year.</p>
+        <a class="of-btn" href="../roadmap/" id="goRoad">Get the Roadmap free</a>
+        <p class="of-proof"><b>Free</b>, instant PDF download.</p>
       </article>
 
       <article class="of-c of-c1">
@@ -357,9 +335,9 @@ body{-webkit-tap-highlight-color:transparent}
           <dl>
             <dt>You get</dt><dd>A step&#8209;by&#8209;step plan for all four years of high school, with checklists and fill&#8209;in worksheets.</dd>
             <dt>Best for</dt><dd>Students who want to lead it themselves, and parents who want to follow along.</dd>
-            <dt>How it starts</dt><dd>Instant PDF download. Open your grade&rsquo;s chapter and do the on&#8209;track check first.</dd>
+            <dt>How it starts</dt><dd>Free, instant PDF download. Open your grade&rsquo;s chapter and do the on&#8209;track check first.</dd>
           </dl>
-          <a class="cmp-a" href="#" data-road>Get the Roadmap <span aria-hidden="true">&rsaquo;</span></a>
+          <a class="cmp-a" href="../roadmap/" data-road>Get the Roadmap free <span aria-hidden="true">&rsaquo;</span></a>
         </div>
         <div class="cmp-col">
           <div class="cmp-top"><span class="cmp-t">Matchmaking</span></div>
@@ -371,7 +349,7 @@ body{-webkit-tap-highlight-color:transparent}
           <a class="cmp-a" href="../matchmaking/">Book a matchmaking call <span aria-hidden="true">&rsaquo;</span></a>
         </div>
       </div>
-      <p class="cmp-note rv"><b>You don&rsquo;t have to pick forever.</b> Start with the Roadmap and book a matchmaking call whenever you want a person beside you.</p>
+      <p class="cmp-note rv"><b>You don&rsquo;t have to pick forever.</b> Start with the free Roadmap and book a matchmaking call whenever you want a person beside you.</p>
     </div>
   </section>
 
@@ -392,11 +370,7 @@ body{-webkit-tap-highlight-color:transparent}
 </main>
 
 <script>
-/* ===== SETTINGS ===== */
-var ROADMAP_URL     = 'https://buy.stripe.com/fZu9AMfhBbvU1HH5ni2ZO00'; // Stripe Payment Link: 2by2 Roadmap (Digital Edition), $19.99 -> thank-you page
-var ROADMAP_PAGE    = '../roadmap/'; // preview page (flip through the pages) -> Stripe checkout
-var STARTER_WEBHOOK = '';  // GHL inbound webhook for the free Starter Kit ("ROADMAP 1 - Starter Kit Intake"). Leave blank to hide the free option.
-/* ==================== */
+var ROADMAP_PAGE = '../roadmap/'; // preview page with the free download form
 (function(){
   function track(n,p){ try{ if(window.tt) window.tt(n,p||{}); }catch(e){} }
 
@@ -417,26 +391,6 @@ var STARTER_WEBHOOK = '';  // GHL inbound webhook for the free Starter Kit ("ROA
     els.forEach(function(el){ io.observe(el); });
   } else els.forEach(function(el){ el.classList.add('on'); });
 
-  // free Starter Kit (only shown once the GHL webhook is set)
-  if(!STARTER_WEBHOOK) return;
-  var card=document.getElementById('roadCard'), btn=document.getElementById('freeBtn'), kit=document.getElementById('kit');
-  var form=document.getElementById('kitForm'), msg=document.getElementById('kitMsg');
-  btn.hidden=false; kit.hidden=false;
-  btn.addEventListener('click',function(){ card.classList.add('open'); setTimeout(function(){ var g=form.querySelector('input[name=grade]'); g&&g.focus({preventScroll:true}); },350); });
-  form.addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var g=form.querySelector('input[name=grade]:checked'), email=document.getElementById('kitEmail').value.trim(), name=document.getElementById('kitName').value.trim();
-    msg.className='kit-msg';
-    if(!g){ msg.textContent='Pick your grade first.'; return; }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ msg.textContent='That email doesn’t look right. Try once more?'; return; }
-    var b=form.querySelector('button[type=submit]'); b.disabled=true; b.textContent='Sending…';
-    var payload={first_name:name,email:email,role:document.getElementById('kitRole').value,grade:g.value,source:'site-start-page',attribution:window.TWOBY2_ATTR||{}};
-    fetch(STARTER_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true})
-      .then(function(r){ if(!r.ok) throw 0;
-        msg.className='kit-msg ok'; msg.textContent='Sent. Your '+g.value+'th grade Starter Kit is on its way to '+email+'.';
-        b.textContent='Sent'; track('Lead',{content_name:'Starter Kit',grade:g.value}); })
-      .catch(function(){ b.disabled=false; b.textContent='Send my Starter Kit'; msg.textContent='That didn’t go through. Try again, or email team@2by2academy.co.'; });
-  });
 })();
 </script>
 </body>

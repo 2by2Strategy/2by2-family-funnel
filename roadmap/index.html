@@ -6,10 +6,10 @@
 <meta name="darkreader-lock">
 <script src="../track.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The 4-Year Roadmap – See inside | 2by2 Academy</title>
-<meta name="description" content="A look inside the 4-Year Roadmap: a grade-by-grade plan from 9th to 12th, with monthly to-dos, on-track checks and fill-in worksheets. $19.99, instant PDF.">
-<meta property="og:title" content="The 4-Year Roadmap – See inside">
-<meta property="og:description" content="Every grade, 9th to 12th: what to do each month, each summer, and before every deadline.">
+<title>The 4-Year Roadmap – Free PDF | 2by2 Academy</title>
+<meta name="description" content="A look inside the 4-Year Roadmap: a grade-by-grade plan from 9th to 12th, with monthly to-dos, on-track checks and fill-in worksheets. Free, instant PDF.">
+<meta property="og:title" content="The 4-Year Roadmap – Free PDF">
+<meta property="og:description" content="The do-it-yourself plan for every grade, 9th to 12th: what to do each month, each summer, and before every deadline. Free.">
 <meta property="og:image" content="https://2by2academy.co/roadmap/img/cover.jpg">
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,6 +67,24 @@ p,h1,h2,h3,figure{margin:0}
 .btn:hover{background:#EEE9FD;transform:translateY(-2px)}
 .btn:active{transform:scale(.98)}
 .fine{margin-top:12px;font-size:13.5px;color:var(--ink-mut);text-align:center}
+/* free download form */
+.get{margin-top:6px}
+.get-l{display:block;margin:16px 0 8px;font:700 11px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--acc)}
+.grades{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 12px;padding:0;border:0}
+.grades label{position:relative}
+.grades input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.grades span{display:block;padding:11px 0;border-radius:12px;border:1px solid rgba(164,139,255,.35);background:rgba(164,139,255,.08);text-align:center;font:700 15px var(--sans);color:#fff;transition:background .2s,border-color .2s}
+.grades input:checked+span{background:#fff;border-color:#fff;color:#5A3FD6}
+.grades input:focus-visible+span{outline:2px solid var(--acc);outline-offset:2px}
+.get-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.get-in{width:100%;padding:14px 16px;border-radius:12px;border:1px solid #3A2F6E;background:#fff;color:var(--text);font:500 16px var(--sans);margin:0 0 10px;-webkit-appearance:none;appearance:none}
+select.get-in{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235A3FD6' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center}
+.get .btn{margin-top:6px}
+.get .btn[disabled]{opacity:.7;cursor:default;transform:none}
+.get-msg{min-height:1.3em;margin-top:10px;font-size:14px;color:#FFD3D3;text-align:center}
+.get .fine{margin-top:2px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+@media (max-width:380px){.get-row{grid-template-columns:minmax(0,1fr)}}
 /* section heads */
 .sec{padding-block:clamp(64px,8vw,104px) 0}
 .sec-k{display:block;font:600 11px var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--acc);text-align:center}
@@ -154,9 +172,9 @@ p,h1,h2,h3,figure{margin:0}
       <a class="bar-link" href="../start/"><span aria-hidden="true">&lsaquo;</span> Back</a>
     </div>
     <div class="hero">
-      <span class="kick">The 4&#8209;Year Roadmap</span>
-      <h1>See what&rsquo;s <em>inside.</em></h1>
-      <p>Every grade from 9th to 12th: what to do each month, each summer, and before every deadline.</p>
+      <span class="kick">The 4&#8209;Year Roadmap &middot; now free</span>
+      <h1>Do it <em>yourself.</em></h1>
+      <p>The physical copy sold out, so the full PDF is now free. Every grade from 9th to 12th: what to do each month, each summer, and before every deadline.</p>
     </div>
   </div>
 </header>
@@ -171,8 +189,28 @@ p,h1,h2,h3,figure{margin:0}
         <ul class="toc" aria-label="What it covers">
           <li>9th &rarr; 12th grade</li><li>Monthly plan</li><li>Summers</li><li>Deadlines</li><li>On&#8209;track checks</li><li>5 worksheets</li><li>Parent page</li>
         </ul>
-        <div class="price"><b>$19.99</b><span>Instant PDF, sent to your email.</span></div>
-        <a class="btn" href="#" data-buy id="buyTop">Get the Roadmap <span aria-hidden="true">&rsaquo;</span></a>
+        <div class="price"><b>Free</b><span>The full 86&#8209;page PDF.</span></div>
+        <form class="get" id="getForm" novalidate>
+          <span class="get-l" id="gradeL">Your grade</span>
+          <fieldset class="grades" aria-labelledby="gradeL">
+            <label><input type="radio" name="grade" value="9"><span>9th</span></label>
+            <label><input type="radio" name="grade" value="10"><span>10th</span></label>
+            <label><input type="radio" name="grade" value="11"><span>11th</span></label>
+            <label><input type="radio" name="grade" value="12"><span>12th</span></label>
+          </fieldset>
+          <div class="get-row">
+            <input class="get-in" id="gName" name="first_name" autocomplete="given-name" placeholder="First name" aria-label="First name">
+            <select class="get-in" id="gRole" name="role" aria-label="I am a">
+              <option value="student">I&rsquo;m a student</option>
+              <option value="parent">I&rsquo;m a parent</option>
+            </select>
+          </div>
+          <input class="get-in" id="gEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" aria-label="Email">
+          <input type="text" name="website" id="gHp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+          <button class="btn" type="submit" id="buyTop">Get the free PDF <span aria-hidden="true">&rsaquo;</span></button>
+          <p class="get-msg" id="getMsg" aria-live="polite"></p>
+          <p class="fine">Opens right away. We&rsquo;ll email you a copy too.</p>
+        </form>
       </div>
     </div>
   </section>
@@ -181,7 +219,7 @@ p,h1,h2,h3,figure{margin:0}
     <div class="wrap">
       <span class="sec-k rv">Real pages</span>
       <h2 class="sec-h rv" id="pgTitle">A peek <em>inside.</em></h2>
-      <p class="sec-lede rv">A few real pages. The rest is in the PDF.</p>
+      <p class="sec-lede rv">A few real pages. The rest is in the free PDF.</p>
     </div>
     <div class="pages" id="pages">
         <figure class="pg"><button type="button" data-full="img/not-too-late.jpg" aria-label="Enlarge: It is not too late"><img src="img/not-too-late.jpg?v=3" width="900" height="1165" alt="Roadmap page preview: It is not too late" loading="lazy"></button><figcaption><b>It is not too late</b>9th or 12th, start here. Most of your competition hasn&rsquo;t started either.</figcaption></figure>
@@ -234,9 +272,9 @@ p,h1,h2,h3,figure{margin:0}
     <div class="wrap">
       <h2 class="sec-h rv">Your plan, <em>all four years.</em></h2>
       <div class="card rv">
-        <div class="price"><b>$19.99</b><span>Instant PDF.</span></div>
-        <a class="btn" href="#" data-buy>Get the Roadmap <span aria-hidden="true">&rsaquo;</span></a>
-        <p class="fine">Sent to your email right after.</p>
+        <div class="price"><b>Free</b><span>The whole thing. No catch.</span></div>
+        <a class="btn" href="#getForm" data-get>Get the free PDF <span aria-hidden="true">&rsaquo;</span></a>
+        <p class="fine">Do it yourself, at your own pace.</p>
       </div>
       <p class="alt">Want a person beside you instead? <a href="../matchmaking/">Book a free matchmaking call</a></p>
     </div>
@@ -246,27 +284,55 @@ p,h1,h2,h3,figure{margin:0}
 </main>
 
 <div class="sticky" id="sticky" aria-hidden="true">
-  <div class="s-t"><b>The 4&#8209;Year Roadmap</b><span>$19.99 &middot; instant PDF</span></div>
-  <a class="btn" href="#" data-buy tabindex="-1">Get it <span aria-hidden="true">&rsaquo;</span></a>
+  <div class="s-t"><b>The 4&#8209;Year Roadmap</b><span>Free &middot; instant PDF</span></div>
+  <a class="btn" href="#getForm" data-get tabindex="-1">Get it free <span aria-hidden="true">&rsaquo;</span></a>
 </div>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Page preview"><button class="lb-x" id="lbX" type="button" aria-label="Close">&times;</button><img id="lbImg" alt=""></div>
 
 <script>
 /* ===== SETTINGS ===== */
-var ROADMAP_URL = 'https://buy.stripe.com/fZu9AMfhBbvU1HH5ni2ZO00'; // Stripe Payment Link: 2by2 Roadmap (Digital Edition), $19.99
+var SHEET_URL   = 'https://script.google.com/macros/s/AKfycbzPQmNqcJglqTqH6Hr3htZCu0GWtTuwkzUPTQR4IoQIHrxRAkywcD3vg9GFLRAvy9zy/exec'; // "2by2 Family Sign-ups" sheet (source = roadmap-free)
+var GHL_WEBHOOK = ''; // GHL inbound webhook ("Roadmap: free download") -> contact + tag roadmap-download + email with the PDF. Blank = sheet only.
+var PDF_PAGE    = '../roadmap-xdsrojwg9uzkn2fp/'; // download page (instant PDF)
 /* ==================== */
 (function(){
   function track(n,p){ try{ if(window.tt) window.tt(n,p||{}); }catch(e){} }
-  track('ViewContent',{content_name:'4-Year Roadmap',value:19.99,currency:'USD'});
+  track('ViewContent',{content_name:'4-Year Roadmap (free)'});
 
-  document.querySelectorAll('[data-buy]').forEach(function(a){
-    a.href=ROADMAP_URL;
-    a.addEventListener('click',function(){ track('InitiateCheckout',{content_name:'4-Year Roadmap',value:19.99,currency:'USD',from:'roadmap-preview'}); });
+  var form=document.getElementById('getForm'), msg=document.getElementById('getMsg'), btn=document.getElementById('buyTop');
+  // "Get it free" buttons scroll up to the form
+  document.querySelectorAll('[data-get]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault(); track('RoadmapFormJump',{});
+      form.scrollIntoView({behavior:'smooth',block:'center'});
+      setTimeout(function(){ var g=form.querySelector('input[name=grade]:checked')||form.querySelector('input[name=grade]'); g&&g.focus({preventScroll:true}); },500);
+    });
+  });
+  form.addEventListener('input',function(){ msg.textContent=''; });
+  form.addEventListener('change',function(){ msg.textContent=''; });
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var g=form.querySelector('input[name=grade]:checked'), name=document.getElementById('gName').value.trim(),
+        email=document.getElementById('gEmail').value.trim(), role=document.getElementById('gRole').value;
+    if(document.getElementById('gHp').value) return;
+    if(!g){ msg.textContent='Pick your grade first.'; return; }
+    if(!name){ msg.textContent='Add your first name.'; document.getElementById('gName').focus(); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ msg.textContent='That email doesn’t look right. Try once more?'; document.getElementById('gEmail').focus(); return; }
+    msg.textContent=''; btn.disabled=true; btn.firstChild.nodeValue='Opening your PDF… ';
+    var attr=window.TWOBY2_ATTR||{};
+    var row={name:name,email:email,phone:'',school:'Grade '+g.value+' · '+role,zip:'',state:'',newsletter:false,
+             source:'roadmap-free'+(attr.utm_source?' · '+attr.utm_source:'')+(attr.utm_campaign?' / '+attr.utm_campaign:'')};
+    try{ fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(row),keepalive:true}); }catch(e){}
+    if(GHL_WEBHOOK){ try{ fetch(GHL_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({first_name:name,email:email,role:role,grade:g.value,source:'roadmap-free',page:location.href,attribution:attr}),keepalive:true}); }catch(e){} }
+    track('Lead',{content_name:'4-Year Roadmap (free)',grade:g.value,role:role});
+    try{ sessionStorage.setItem('2by2_roadmap_dl',JSON.stringify({name:name,email:email})); }catch(e){}
+    setTimeout(function(){ location.href=PDF_PAGE; },700);
   });
 
   // sticky buy bar: show after the top button scrolls away, hide near the closing card
-  var sticky=document.getElementById('sticky'), top=document.getElementById('buyTop'), end=document.getElementById('end');
+  var sticky=document.getElementById('sticky'), top=form, end=document.getElementById('end');
   var ticking=false;
   function upd(){
     ticking=false;
