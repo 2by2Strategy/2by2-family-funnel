@@ -465,12 +465,12 @@ function renderDone(){
     '</ul>';
   if(BOOKING_URL){
     stage.innerHTML='<div class="step"><h3 class="display">You’re all set, '+esc(A.firstName||'')+'.</h3>'+
-      '<p class="sub">Pick a time for your free 20-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+
+      '<p class="sub">Pick a time for your free 30-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+
       '<a class="cta" id="book" href="'+bookingLink()+'" target="_blank" rel="noopener">Choose a time &rarr;</a>'+list+'</div>';
     document.getElementById('book').onclick=function(){ track('Schedule'); send('book'); };
   } else {
     stage.innerHTML='<div class="step"><h3 class="display">Thanks, '+esc(A.firstName||'')+'. We’ve got it.</h3>'+
-      '<p class="sub">We&rsquo;ll email you within one business day to set up your free 20-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+list+'</div>';
+      '<p class="sub">We&rsquo;ll email you within one business day to set up your free 30-minute fit call. No hard sell. We&rsquo;re selective on both sides, so the call is about whether this is right for '+you()+'.</p>'+list+'</div>';
   }
 }
 
